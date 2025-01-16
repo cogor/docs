@@ -3,17 +3,18 @@ type: tutorial
 title: Parabéns!
 description: >-
   Tutorial: Construa seu primeiro blog Astro —
+
   Verifique a versão final do seu projeto e descubra o que fazer a seguir
   com Astro!
 i18nReady: true
 ---
-import Badge from '~/components/Badge.astro';
 import Box from '~/components/tutorial/Box.astro';
 import Checklist from '~/components/Checklist.astro';
 import CompletionConfetti from '~/components/tutorial/CompletionConfetti.astro';
 import PreCheck from '~/components/tutorial/PreCheck.astro';
 import Button from '~/components/Button.astro';
 
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 Há mais uma modificação a se fazer...
 
@@ -56,14 +57,6 @@ Bem-vindo ao universo, astronauta. 👩🏼‍🚀👨🏿‍🚀🧑‍🚀👩
 </Checklist>
 </Box>
 
-## Próximos Passos
-
-Continue com uma de nossas extensões do tutorial para [adicionar transições de visualização à este projeto](/pt-br/tutorials/add-view-transitions/) ou para [adicionar uma coleção de conteúdo para gerenciar suas postagens do blog](/pt-br/tutorials/add-content-collections/)
-
-[Comece um novo projeto Astro](/pt-br/getting-started/)
-
-[Junte-se a nós no Discord](https://astro.build/chat)
-
 <CompletionConfetti />
 
 ## Compartilhe sua conquista!
@@ -71,6 +64,23 @@ Continue com uma de nossas extensões do tutorial para [adicionar transições d
 Parabéns por completar o tutorial de blog do Astro! Compartilhe sua conquista com o mundo e deixe todos saberem que você é um Astronauta agora!
 
 <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-  <Button href='https://twitter.com/intent/tweet?text=Just%20finished%20learning%20how%20to%20build%20my%20first%20Astro%20blog!%20Check%20it%20out%20at%20https://docs.astro.build/%0Avia%20%40astrodotbuild'>Compartilhe no Twitter</Button>
-  <Button href='https://www.reddit.com/submit?url=https://docs.astro.build/&title=Just%20finished%20learning%20how%20to%20build%20my%20first%20Astro%20blog!'>Compartilhe no Reddit</Button>
+  <Button link='https://twitter.com/intent/tweet?text=Just%20finished%20learning%20how%20to%20build%20my%20first%20Astro%20blog!%20Check%20it%20out%20at%20https://docs.astro.build/%0Avia%20%40astrodotbuild'>Compartilhe no Twitter</Button>
+  <Button link='https://www.reddit.com/submit?url=https://docs.astro.build/&title=Just%20finished%20learning%20how%20to%20build%20my%20first%20Astro%20blog!'>Compartilhe no Reddit</Button>
+  <Button link='https://bsky.app/intent/compose?text=Just%20finished%20learning%20how%20to%20build%20my%20first%20Astro%20blog!%20Check%20it%20out%20at%20https://docs.astro.build/%0Avia%20%40astro.build'>Compartilhe no Bluesky</Button>
 </div>
+
+## Próximos Passos
+
+Você pode melhorar o código final desse projeto com alguma das extensões desse tutorial, ou começar seu próximo projeto Astro!
+<CardGrid>
+  <LinkCard
+    title="Comece um novo projeto Astro"
+    description="Comece um novo projeto vazio, ou use um modelo de tema Astro existente."
+    href="/pt-br/install-and-setup/"
+  />
+  <LinkCard
+    title="Junte-se a nós no Discord"
+    description="Conecte-se com a nossa comunidade para fazer perguntas, compartilhar seu trabalho, e se envolver com o projeto!"
+    href="https://astro.build/chat"
+  />
+</CardGrid>

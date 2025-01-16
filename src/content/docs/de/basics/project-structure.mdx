@@ -1,9 +1,12 @@
 ---
 title: Projektstruktur
-description: 'Erfahre, wie du ein Projekt mit Astro strukturierst.'
+description: Eine Einführung in die grundlegende Dateistruktur eines Astro-Projekts.
+i18nReady: true
 ---
 
-Dein neues Astro-Projekt, welches vom CLI-Assistenten `create-astro` erstellt wurde, enthält bereits einige Dateien und Verzeichnisse. Alle weiteren Inhalte erstellst du selbst und fügst sie zur bestehenden Verzeichnisstruktur von Astro hinzu.
+import { FileTree } from '@astrojs/starlight/components';
+
+Dein neues Astro-Projekt, welches vom CLI-Assistenten `create astro` erstellt wurde, enthält bereits einige Dateien und Verzeichnisse. Alle weiteren Inhalte erstellst du selbst und fügst sie zur bestehenden Verzeichnisstruktur von Astro hinzu.
 
 Hier erfährst du, wie ein Astro-Projekt grundsätzlich organisiert ist, und welche Dateien du in deinem neuen Projekt vorfindest.
 
@@ -11,7 +14,7 @@ Hier erfährst du, wie ein Astro-Projekt grundsätzlich organisiert ist, und wel
 
 Astro nutzt einige fest vorgegebene Verzeichnisse, um dein Projekt zu strukturieren. Das Stammverzeichnis jedes Astro-Projekts sollte die folgenden Verzeichnisse und Dateien enthalten:
 
-- `src/*` - Der Quellcode deines Projekts (Komponenten, Seiten, Stile usw.)
+- `src/*` - Der Quellcode deines Projekts (Komponenten, Seiten, Stile, Bilder, usw.)
 - `public/*` - Nicht zu verarbeitende Inhalte, die kein Quellcode sind (Schriftarten, Symbole usw.)
 - `package.json` - Die Projektdatei deines Paketmanagers
 - `astro.config.mjs` - Eine Astro-Konfigurationsdatei (wird empfohlen)
@@ -21,30 +24,38 @@ Astro nutzt einige fest vorgegebene Verzeichnisse, um dein Projekt zu strukturie
 
 Ein typischer Astro-Verzeichnisbaum könnte so aussehen:
 
-```
-├── src/
-│   ├── components/
-│   │   ├── Header.astro
-│   │   └-─ Button.jsx
-│   ├── layouts/
-│   │   └-─ PostLayout.astro
-│   └── pages/
-│   │   ├── posts/
-│   │   │   ├── post1.md
-│   │   │   ├── post2.md
-│   │   │   └── post3.md
-│   │   └── index.astro
-│   └── styles/
-│       └-─ global.css
-├── public/
-│   ├── robots.txt
-│   ├── favicon.svg
-│   └-─ social-image.png
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
-
-```
+<FileTree>
+- public/
+  - robots.txt
+  - favicon.svg
+  - mein-lebenslauf.pdf
+- src/
+  - blog/
+    - post1.md
+    - post2.md
+    - post3.md
+  - components/
+    - Header.astro
+    - Button.jsx
+  - images/
+    - image1.jpg
+    - image2.jpg
+    - image3.jpg
+  - layouts/
+    - PostLayout.astro
+  - pages/
+    - posts/
+      - [post].astro
+    - about.astro
+    - **index.astro**
+    - rss.xml.js
+  - styles/
+    - global.css
+  - content.config.ts
+- astro.config.mjs
+- package.json
+- tsconfig.json
+</FileTree>
 
 ### `src/`
 
@@ -56,30 +67,35 @@ Im `src/`-Verzeichnis befindet sich der Großteil deines Projektquellcodes. Dies
 - [UI-Framework-Komponenten (React usw.)](/de/guides/framework-components/)
 - [Stile (CSS, Sass)](/de/guides/styling/)
 - [Markdown](/de/guides/markdown-content/)
+- [Bilder, die von Astro optimiert und bearbeitet werden](/de/guides/images/)
 
 Astro verarbeitet, optimiert und bündelt deine Dateien in `src/`, um die endgültige Website zu erstellen, die an den Browser gesendet wird. Im Gegensatz zum statischen `public/`-Verzeichnis werden deine `src/`-Dateien von Astro für dich verarbeitet und optimiert:
 
-Einige Dateien (z.B. Astro-Komponenten) werden gar nicht so an den Browser gesendet, wie du sie geschrieben hast, sondern stattdessen in statisches HTML gerendert. Andere Dateien (z.B. CSS) werden zwar an den Browser gesendet, können aber zur Leistungsverbesserung vorher optimiert und mit anderen CSS-Dateien gebündelt werden.
+Einige Dateien (z.B. Astro-Komponenten) werden gar nicht so an den Browser gesendet, wie du sie geschrieben hast, sondern stattdessen in statisches HTML gerendert. Andere Dateien (z.B. CSS) werden zwar an den Browser gesendet, können aber zur Leistungsverbesserung vorher optimiert oder mit anderen CSS-Dateien gebündelt werden.
+
+:::tip
+Dieser Leitfaden beschreibt zwar einige gängige Konventionen, die in der Astro-Community verwendet werden, aber das einzigen Verzeichnis, welches von Astro reserviert ist, ist `src/pages/`. Es steht dir frei, alle anderen Verzeichnisse so umzubenennen und umzugestalten, wie es für dich am besten ist.
+:::
+
+### `src/pages`
+
+Seitenrouten werden für deine Website erstellt, indem du [unterstützte Dateitypen](/de/basics/astro-pages/#unterstützte-seitendateien) zu diesem Verzeichnis hinzufügst.
+
+:::caution
+`src/pages` ist ein **erforderliches** Unterverzeichnis deines Astro-Projekts. Fehlt es, hat deine Website keine Seiten oder Routen!
+:::
 
 ### `src/components`
 
-**Komponenten** sind wiederverwendbare Quellcode-Einheiten, die du beliebig oft auf deinen Seiten einsetzen kannst. Du kannst sowohl [Astro-Komponenten](/de/basics/astro-components/) als auch [UI-Framework-Komponenten](/de/guides/framework-components/) aus Frameworks wie React oder Vue verwenden. Es ist üblich, alle Komponenten eines Projekts in diesem Ordner zu gruppieren und zu organisieren.
+**Komponenten** sind wiederverwendbare Code-Einheiten für deine HTML-Seiten. Das können [Astro-Komponenten](/de/basics/astro-components/) oder [UI-Framework-Komponenten](/de/guides/framework-components/) wie React oder Vue sein. Es ist üblich, dass du alle Komponenten deines Projekts in diesem Ordner zusammenfasst und organisierst.
 
 Diese Vorgehensweise ist in Astro-Projekten üblich, aber nicht zwingend erforderlich. Du kannst deine Komponenten gerne auch anders organisieren!
 
 ### `src/layouts`
 
-[Layouts](/de/basics/layouts/) sind spezielle Komponenten, die deine Inhalte in ein übergeordnetes Seitenlayout einbinden. Sie werden meistens verwendet, um das umgebende Layout von [Astro-Seiten](/de/basics/astro-pages/) und [Markdown- oder MDX-Seiten](/de/guides/markdown-content/) festzulegen.
+[Layouts](/de/basics/layouts/) sind Astro-Komponenten, welche die UI-Struktur definieren, die von einer oder mehreren [Seiten](/de/basics/astro-pages/) gemeinsam genutzt wird.
 
 Genau wie bei `src/components` ist die Nutzung dieses Verzeichnisses in Astro-Projekten üblich, aber nicht zwingend erforderlich.
-
-### `src/pages`
-
-[Seiten](/de/basics/astro-pages/) sind spezielle Komponenten, die verwendet werden, um neue Seiten auf deiner Website zu erstellen. Es kann sich dabei um eine Astro-Komponente oder eine Markdown-Datei handeln, die den Inhalt einer Seite auf deiner Website repräsentiert.
-
-:::caution
-`src/pages` ist ein **erforderliches** Unterverzeichnis deines Astro-Projekts. Fehlt es, hat deine Website keine Seiten oder Routen!
-:::
 
 ### `src/styles`
 
@@ -87,9 +103,9 @@ Es ist eine übliche Vorgehensweise, deine CSS- oder Sass-Stile im Verzeichnis `
 
 ### `public/`
 
-Das Verzeichnis `public/` ist für Dateien und Inhalte vorgesehen, die Astro während des Buildvorgangs nicht verarbeiten muss. Diese Dateien werden während des Buildvorgangs unverändert in das Ausgabeverzeichnis kopiert.
+Das Verzeichnis `public/` ist für Dateien und Inhalte vorgesehen, die Astro während des Buildvorgangs nicht verarbeiten muss. Die Dateien in diesem Ordner werden unverändert in den Build-Ordner kopiert, und dann wird deine Website gebaut.
 
-Dieses Verhalten macht `public/` ideal für verbreitete Inhalte wie Bilder und Schriftarten, sowie für besondere Dateien wie `robots.txt` und `manifest.webmanifest`.
+Dieses Verhalten macht `public/` ideal für allgemeine Inhalte, die keine Bearbeitung benötigen, wie z.B. einige Bilder und Schriftarten oder spezielle Dateien wie `robots.txt` und `manifest.webmanifest`.
 
 Du kannst zwar auch CSS- und JavaScript-Dateien in `public/` speichern, beachte aber bitte, dass diese dann während des Buildvorgangs weder gebündelt noch optimiert werden.
 
@@ -99,17 +115,21 @@ Als allgemeine Regel kann man sagen, dass jeglicher CSS- oder JavaScript-Code, d
 
 ### `package.json`
 
-Diese Datei wird von JavaScript-Paketmanagern verwendet, um die erforderlichen Pakete ("Abhängigkeiten") eines Projekts zu verwalten. Sie definiert auch die Skripte, die üblicherweise dazu verwendet werden, um Astro auszuführen (z.B. `npm start`, `npm run build`).
+Diese Datei wird von JavaScript-Paketmanagern verwendet, um die erforderlichen Pakete ("Abhängigkeiten") eines Projekts zu verwalten. Sie definiert auch die Skripte, die üblicherweise dazu verwendet werden, um Astro auszuführen (z.B. `npm run dev`, `npm run build`).
 
 Es gibt [zwei Arten von Abhängigkeiten](https://docs.npmjs.com/specifying-dependencies-and-devdependencies-in-a-package-json-file), die du in deiner `package.json`-Datei festlegen kannst: `dependencies` und `devDependencies`. In den meisten Fällen funktionieren sie auf die gleiche Weise: Astro benötigt zum Erzeugungszeitpunkt alle Abhängigkeiten, und auch dein Paketmanager wird beide Arten installieren. Wir empfehlen dir, all deine Abhängigkeiten zunächst in `dependencies` einzutragen, und `devDependencies` nur zu verwenden, wenn dein spezieller Anwendungsfall es erfordert.
 
-Eine Anleitung zur Erstellung einer neuen `package.json`-Datei für dein Projekt findest du auf der Seite [Manuelle Installation von Astro](/de/install/manual/).
+Eine Anleitung zur Erstellung einer neuen `package.json`-Datei für dein Projekt findest du auf der Seite [Manuelle Installation von Astro](/de/install-and-setup/#manual-setup).
 
 ### `astro.config.mjs`
 
 Diese Datei wird von jeder Starter-Vorlage generiert und enthält Konfigurations&shy;optionen für dein Astro-Projekt. Hier kannst du die zu verwendenden Integrationen, Build-Optionen, Serveroptionen und mehr angeben.
 
-Weiterführende Informationen zu den Einstellungen findest du in der [Anleitung zur Konfiguration von Astro](/de/guides/configuring-astro/).
+Astro unterstützt mehrere Dateiformate für seine JavaScript-Konfigurationsdatei: `astro.config.js`, `astro.config.mjs`, `astro.config.cjs` und `astro.config.ts`. Wir empfehlen, in den meisten Fällen `.mjs` oder `.ts` zu verwenden, wenn du TypeScript in deiner Konfigurationsdatei schreiben willst.
+
+Das Laden von TypeScript-Konfigurationsdateien wird mit [`tsm`](https://github.com/lukeed/tsm) gehandhabt und berücksichtigt die `tsconfig`-Optionen deines Projekts.
+
+In der [Konfigurationsreferenz](/de/reference/configuration-reference/) findest du alle Einzelheiten.
 
 ### `tsconfig.json`
 

@@ -11,8 +11,7 @@ import Checklist from '~/components/Checklist.astro';
 import MultipleChoice from '~/components/tutorial/MultipleChoice.astro';
 import Option from '~/components/tutorial/Option.astro';
 import PreCheck from '~/components/tutorial/PreCheck.astro';
-
-
+import { Steps } from '@astrojs/starlight/components';
 
 Maintenant que vous avez des pages individuelles pour chaque étiquette, créons des liens vers elles.
 
@@ -32,6 +31,7 @@ Mais, comme vous avez déjà le dossier `/tags/`, vous pouvez profiter d'un autr
 
 ## Essayez par vous-même - Créer une page répertoriant les étiquettes
 
+<Steps>
 1. Créez un nouveau fichier `index.astro` dans le dossier `src/pages/tags/`.
 
 2. Accédez à `http://localhost:4321/tags` et vérifiez que votre site contient désormais une page à cette URL. Elle sera vide, mais elle existera.
@@ -40,7 +40,7 @@ Mais, comme vous avez déjà le dossier `/tags/`, vous pouvez profiter d'un autr
 
     <details>
       <summary>Cliquez pour voir les étapes</summary>
-
+      <Steps>
       1. Créez un nouveau composant de page dans `src/pages/tags/`.
 
           <details>
@@ -74,10 +74,11 @@ Mais, comme vous avez déjà le dossier `/tags/`, vous pouvez profiter d'un autr
           <BaseLayout pageTitle={pageTitle}></BaseLayout>
           ```
           </details>
+      </Steps>
     </details>
 
 4. Vérifiez à nouveau votre aperçu dans le navigateur, et vous devriez avoir une page formatée, prête à ajouter du contenu !
-
+</Steps>
 </Box>
 
 ## Créez un tableau d'étiquettes
@@ -86,13 +87,12 @@ Vous avez déjà affiché des éléments dans une liste à partir d'un tableau e
 
 <details>
     <summary>Voir le code</summary>
-    
+
     ```astro title="src/pages/tags/index.astro"
     ---
     import BaseLayout from '../../layouts/BaseLayout.astro';
-    const allPosts = await Astro.glob("../posts/*.md");
-    const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
-    const pageTitle = "Index des balises";
+    const tags = ['astro', 'blogging', 'apprentissage en public', 'succès', 'échecs', 'communauté']
+    const pageTitle = "Index des étiquettes";
     ---
     <BaseLayout pageTitle={pageTitle}>
       <ul>
@@ -106,7 +106,7 @@ Vous pourriez le faire, mais alors vous devriez revenir sur ce fichier et mettre
 
 Heureusement, vous savez déjà comment récupérer les données de tous vos fichiers Markdown en une seule ligne de code, puis renvoyer une liste de toutes vos étiquettes.
 
-
+<Steps>
 1. Dans `src/pages/tags/index.astro`, ajoutez la ligne de code au script frontmatter qui donnera à votre page accès aux données de chaque fichier de blog `.md`.
 
     <details>
@@ -114,28 +114,30 @@ Heureusement, vous savez déjà comment récupérer les données de tous vos fic
     ```astro title = "src/pages/tags/index.astro" ins={3}
     ---
     import BaseLayout from '../../layouts/BaseLayout.astro';
-    const allPosts = await Astro.glob('../posts/*.md');
+    const allPosts = Object.values(import.meta.glob('../posts/*.md', { eager: true }));
     const pageTitle = "Répertoire des étiquettes";
     ---
     ```
     </details>
 
-2. Ensuite, ajoutez la ligne de code JavaScript suivante à votre composant de page. Il s'agit du même code que nous avons utilisé dans `src/pages/tags/[tag].astro` pour renvoyer une liste d'étiquettes uniques.
+2. Ensuite, ajoutez la ligne de code JavaScript suivante à votre composant de page. Il s'agit du même code reposant sur le support TypeScript intégré d'Astro que vous avez utilisé dans `src/pages/tags/[tag].astro` pour renvoyer une liste d'étiquettes uniques.
 
     ```astro title = "src/pages/tags/index.astro" ins={4}
     ---
     import BaseLayout from '../../layouts/BaseLayout.astro';
-    const allPosts = await Astro.glob('../posts/*.md');
-    const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
+    const allPosts = Object.values(import.meta.glob('../posts/*.md', { eager: true }));
+    const tags = [...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat())];
     const pageTitle = "Répertoire des étiquettes";
     ---
     
     ```
+</Steps>
 
-## Créez votre liste de balises
+## Créez votre liste d'étiquettes
 
 Au lieu de créer des éléments dans une liste non ordonnée cette fois-ci, créez un `<p>` pour chaque élément, à l'intérieur d'un `<div>`. Le modèle devrait vous sembler familier !
 
+<Steps>
 1. Ajoutez le code suivant à votre modèle de composant :
 
     ```astro title="src/pages/tags/index.astro" ins={2}
@@ -143,7 +145,7 @@ Au lieu de créer des éléments dans une liste non ordonnée cette fois-ci, cr�
         <div>{tags.map((tag) => <p>{tag}</p>)}</div>
       </BaseLayout>
     ```
-    Dans votre aperçu dans le navigateur, vérifiez que vous pouvez voir vos étiquettes répertoriées.
+    Dans l'aperçu de votre navigateur, vérifiez que vos étiquettes sont répertoriées. S'il manque des étiquettes à vos articles de blog ou si elles sont mal formatées, la prise en charge TypeScript intégrée d'Astro vous indiquera les erreurs afin que vous puissiez vérifier et corriger votre code.
 
 2. Pour que chaque étiquette renvoie à sa propre page, ajoutez le lien `<a>` suivant à chaque étiquette unique :
 
@@ -156,9 +158,11 @@ Au lieu de créer des éléments dans une liste non ordonnée cette fois-ci, cr�
       </div>
     </BaseLayout>
     ```
+</Steps>
 
 ## Ajoutez des styles à votre liste d'étiquettes
 
+<Steps>
 1. Ajoutez les classes CSS suivantes pour styliser à la fois votre `<div>` et chaque `<p>` qui sera généré. Remarque : Astro utilise la syntaxe HTML pour ajouter des noms de classe !
 
     ```astro title="src/pages/tags/index.astro" 'class="tags"' 'class="tag"'
@@ -195,8 +199,9 @@ Au lieu de créer des éléments dans une liste non ordonnée cette fois-ci, cr�
     </style>
     ```
 
-3. Vérifiez l'aperçu dans le navigateur à `http://localhost:4321/tags` pour vérifier que vous avez de nouveaux styles et que chacune des balises de la page a un lien fonctionnel vers sa propre page de balise individuelle.
-
+3. Vérifiez l'aperçu dans le navigateur à `http://localhost:4321/tags` pour vérifier que vous avez de nouveaux styles et que chacune des étiquettes de la page a un lien fonctionnel vers sa propre page d'étiquette individuelle.
+</Steps>
+  
 ### Validation du code
 
 Voici à quoi devrait ressembler votre nouvelle page :
@@ -204,9 +209,9 @@ Voici à quoi devrait ressembler votre nouvelle page :
 ```astro title="src/pages/tags/index.astro"
 --- 
 import BaseLayout from '../../layouts/BaseLayout.astro';
-const allPosts = await Astro.glob('../posts/*.md');
+const allPosts = Object.values(import.meta.glob('../posts/*.md', { eager: true }));
 const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
-const pageTitle = "Index des balises";
+const pageTitle = "Index des étiquettes";
 ---
 <BaseLayout pageTitle={pageTitle}>
   <div class="tags">
@@ -242,6 +247,7 @@ Actuellement, vous pouvez naviguer vers `http://localhost:4321/tags` et voir cet
 
 Cependant, vous devez toujours rendre ces pages accessibles depuis d'autres pages de votre site web.
 
+<Steps>
 1. Dans votre composant `Navigation.astro`, incluez un lien vers cette nouvelle page répertoriant vos étiquettes.
 
     <details>
@@ -253,7 +259,8 @@ Cependant, vous devez toujours rendre ces pages accessibles depuis d'autres page
     <a href="/tags/">Étiquettes</a>
     ```
     </details>
-
+</Steps>
+  
 <Box icon="puzzle-piece">
 
 ## Défi : Inclure les étiquettes dans la mise en page de vos articles de blog
@@ -261,63 +268,66 @@ Cependant, vous devez toujours rendre ces pages accessibles depuis d'autres page
 Vous avez maintenant écrit tout le code dont vous avez besoin pour afficher également une liste d'étiquettes sur chaque article de blog, et les lier à leurs pages d'étiquettes. Vous avez du travail existant que vous pouvez réutiliser !
 
 Suivez les étapes ci-dessous, puis vérifiez votre travail en le comparant à l'[exemple de code final](#validation-du-code--markdownpostlayout).
-
+<Steps>
+  
 1. Copiez le `<div class="tags">...</div>` et le `<style>...</style>` depuis `src/pages/tags/index.astro` et réutilisez-les à l'intérieur de `MarkdownPostLayout.astro` :
 
-  ```astro title="src/layouts/MarkdownPostLayout.astro" ins={13-17, 21-40}
-  ---
-  import BaseLayout from './BaseLayout.astro';
-  const { frontmatter } = Astro.props;
-  --- 
-  <BaseLayout pageTitle={frontmatter.title}>
-    <p><em>{frontmatter.description}</em></p>
-    <p>{frontmatter.pubDate.toString().slice(0,10)}</p>
+    ```astro title="src/layouts/MarkdownPostLayout.astro" ins={13-17, 21-40}
+    ---
+    import BaseLayout from './BaseLayout.astro';
+    const { frontmatter } = Astro.props;
+    --- 
+    <BaseLayout pageTitle={frontmatter.title}>
+      <p><em>{frontmatter.description}</em></p>
+      <p>{frontmatter.pubDate.toString().slice(0,10)}</p>
+  
+      <p>Rédigé par : {frontmatter.author}</p>
+  
+      <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} /> 
+  
+      <div class="tags">
+        {tags.map((tag: string) => (
+          <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
+        ))}
+      </div>
+  
+      <slot />
+    </BaseLayout>
+    <style>
+      a {
+        color: #00539F;
+      }
+  
+      .tags {
+        display: flex; 
+        flex-wrap: wrap; 
+      }
+  
+      .tag {
+        margin: 0.25em;
+        border: dotted 1px #a1a1a1;
+        border-radius: .5em;
+        padding: .5em 1em;
+        font-size: 1.15em;
+        background-color: #F8FCFD;
+      }
+    </style>
+    ```
 
-    <p>Rédigé par : {frontmatter.author}</p>
-
-    <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} /> 
-
-    <div class="tags">
-      {tags.map((tag) => (
-        <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
-      ))}
-    </div>
-
-    <slot />
-  </BaseLayout>
-  <style>
-    a {
-      color: #00539F;
-    }
-
-    .tags {
-      display: flex; 
-      flex-wrap: wrap; 
-    }
-
-    .tag {
-      margin: 0.25em;
-      border: dotted 1px #a1a1a1;
-      border-radius: .5em;
-      padding: .5em 1em;
-      font-size: 1.15em;
-      background-color: #F8FCFD;
-    }
-  </style>
-  ```
-
+</Steps>
+  
 Avant que ce code ne fonctionne, vous devez apporter **une petite modification** au code que vous avez collé dans `MarkdownPostLayout.astro`. Pouvez-vous deviner ce que c'est ?
 
 <details>
 <summary>Donnez-moi un indice</summary>
 
-Comment les autres propriétés (par exemple, le titre, l'auteur, etc.) sont-elles écrites dans votre modèle de mise en page ? Comment votre mise en page reçoit-elle les propriétés d'un article de blog individuel ?
+Comment les autres props (par exemple, le titre, l'auteur, etc.) sont-elles écrites dans votre modèle de mise en page ? Comment votre mise en page reçoit-elle les props d'un article de blog individuel ?
 </details>
 
 <details>
 <summary>Donnez-moi un autre indice !</summary>
 
-Pour utiliser les propriétés (valeurs passées) d'un article de blog en Markdown dans votre mise en page, comme les balises, vous devez préfixer la valeur avec un certain mot.
+Pour utiliser les props (valeurs passées) d'un article de blog en Markdown dans votre mise en page, comme les étiquettes, vous devez préfixer la valeur avec un certain mot.
 
 <details>
 <summary>Affichez-moi le code !</summary>
@@ -331,7 +341,6 @@ Pour utiliser les propriétés (valeurs passées) d'un article de blog en Markdo
 ```
 </details>
 </details>
-
 </Box>
 
 ### Validation du code : MarkdownPostLayout
@@ -352,7 +361,7 @@ const { frontmatter } = Astro.props;
   <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} /> 
 
   <div class="tags">
-    {frontmatter.tags.map((tag) => (
+    {frontmatter.tags.map((tag: string) => (
       <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>
     ))}
   </div>
@@ -379,6 +388,8 @@ const { frontmatter } = Astro.props;
   }
 </style>
 ```
+  
+  
 
 <Box icon="question-mark">
 

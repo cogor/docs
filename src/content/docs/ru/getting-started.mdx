@@ -1,97 +1,68 @@
 ---
 title: Начало Работы
 description: Основное введение в Astro.
+i18nReady: true
+tableOfContents: false
+editUrl: false
+next: false
+banner:
+  content: |
+    <a href="https://astro.build/blog/astro-4/">Astro версии 4.0 здесь!</a>
+    Готовы ли вы к обновлению? <a href="/ru/guides/upgrade-to/v4/">Прочтите наше руководство по обновлению</a>.
+hero:
+  title: Документация Astro
+  tagline: Руководства, ресурсы и ссылки на API, которые помогут вам создавать с помощью Astro.
+  actions:
+    - text: Начать
+      icon: rocket
+      link: /ru/install-and-setup/
+    - text: Узнать о возможностях Astro
+      icon: right-arrow
+      variant: minimal
+      link: /ru/concepts/why-astro/
+  facepile:
+    tagline: Работает благодаря Astro и нашим контрибьютерам в открытый исходный код.
+    linkText: Присоединяйтесь к нам!
+    link: /ru/contribute/
 ---
-import Button from '~/components/Button.astro'
 
+import { CardGrid } from '@astrojs/starlight/components'
+import Card from '~/components/Landing/Card.astro'
+import ListCard from '~/components/Landing/ListCard.astro'
+import SplitCard from '~/components/Landing/SplitCard.astro'
+import Discord from '~/components/Landing/Discord.astro'
 
+<CardGrid>
+  <Card title="Что вы построите с Astro?" icon="laptop">
+    Исследуйте [стартовые темы Astro](https://astro.build/themes/) для блогов, портфолио, документации, целевых страниц, SaaS, маркетинга, сайтов электронной коммерции и многого другого!
+  </Card>
 
-Cборщик статических сайтов  🚀  Принесите свой собственный фреймворк  🚀  Отправляйте меньше JavaScript
+  <Card title="Пройдите обучение" icon="star">
+    Пройдите вводный курс [по созданию блога](/ru/tutorial/0-introduction/) чтобы изучить основы и создать свой первый сайт на Astro.
+  </Card>
+  
+  <SplitCard title="Начните новый проект" icon="rocket">
+    ```sh
+    # создайте новый проект с помощью npm
+    npm create astro@latest
+    ```
+    
+    В нашем [руководстве по установке] (/ru/install-and-setup/) есть пошаговые инструкции по установке Astro с помощью мастера CLI, созданию нового проекта из существующего репозитория Astro на GitHub, а также по установке Astro вручную.
+  </SplitCard>
 
-## Пробуем Astro
+  <ListCard title="Изучите" icon="open-book">
+    - [Основные функции Astro](/ru/concepts/why-astro/)
+    - [Архитектура островов](/ru/concepts/islands/)
+    - [Компоненты Astro](/ru/basics/astro-components/)
+    - [Синтаксис шаблонов Astro](/ru/reference/astro-syntax/)
+  </ListCard>
 
-Мы максимально упростили начало работы с Astro как в вашем браузере, так и на вашем компьютере!
+  <ListCard title="Подробнее" icon="puzzle">
+    - [Добавление интеграций, таких как React и Tailwind](/ru/guides/integrations-guide/)
+    - [Создание коллекций контента с типобезопасностью](/ru/guides/content-collections/)
+    - [Улучшение навигации с помощью анимации переходов](/ru/guides/view-transitions/)
+    - [Подключение системы управления контентом без заголовков (headless CMS) к вашему проекту](/ru/guides/cms/)
+  </ListCard>
+</CardGrid>
 
-### Онлайн-песочницы
-
-Посетите [astro.new](https://astro.new), чтобы узнать о самом простом способе «попробовать, прежде чем купить». Выберите один из множества начальных шаблонов и начните создавать полную рабочую версию Astro прямо в браузере!
-
-Или **мгновенно запустите наш базовый начальный проект** одним нажатием кнопки:
-
-<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-    <Button href="https://astro.new/starter?on=codesandbox">Открыть в CodeSandbox</Button>
-    <Button href="https://astro.new/starter?on=stackblitz">Открыть в StackBlitz</Button>
-</div>
-
-### Устанавливаем Astro локально
-
-Готовы к установке?
-
-Получите новый проект и запустите локально в кратчайшие сроки с помощью нашего простого мастера CLI `create-astro`!
-
-```bash
-# Запустить эту команду в новом каталоге, чтобы начать!
-npm create astro@latest
-```
-
-⚙️ В нашем [Руководстве по установке](/ru/install/auto/) есть полные пошаговые инструкции по установке Astro с помощью вашего любимого менеджера пакетов.
-
-⚙️ Вместо этого см. [инструкции по ручной настройке](/ru/install/manual/).
-
-
-## Начинаем строить с Astro
-
-Добавляйте контент и функции на свой сайт с места в карьер.
-
-🏗️ Добавлять на свой сайт новые [страницы Astro (.astro)](/ru/basics/astro-pages/) и/или [страницы Markdown (.md)](/ru/guides/markdown-content/).
-
-🏗️ Создавать свой первый [макет](/ru/basics/layouts/).
-
-🏗️ Добавлять дополнительные [CSS и стили](/ru/guides/styling/) на свой сайт. 
-
-*... и еще больше руководств в разделе **Learn***
-
-
-
-## Изучаем Astro
-
-Посмотрите примеры некоторых ключевых концепций и шаблонов сайта Astro!
-
-📚 Узнать больше о [структуре проекта](/ru/basics/project-structure/) Astro.
-
-📚 Узнать больше о [встроенных компонентах](/ru/reference/api-reference/#built-in-components) Astro.
-
-📚 Изучить [API](/ru/reference/api-reference/) Astro.
-
-*... и еще больше справочного материала по **Reference***
-
-## Интегрируем с Astro
-
-Изучите различные интеграции, которые наши пользователи объединили с Astro!
-
-🧰 Использовать CMS с вашим проектом Astro.
-
-🧰 Настроить электронную коммерцию.
-
-🧰 Подключать базу данных к вашему сайту.
-
-*... посмотрите наши [сторонние интеграции](/ru/integrations/integrations/)*
-
-
-
-## Присоединяйтесь к нашему сообществу
-
-Присоединяйтесь к нам в [Astro Discord](https://astro.build/chat), чтобы делиться информацией и получать помощь от активного и дружелюбного сообщества!
-
-💬 Поздоровайтесь на нашем канале `#general`!
-
-💬 Задайте вопрос нашей службе поддержки на нашем канале `#support`!
-
-💬 Поделитесь тем, над чем вы работали, на нашем канале `#showcase`!
-
-
-## Узнать больше
-
-[Astro Блог](https://astro.build/blog/)
-
-[Журнал изменений Astro](https://github.com/withastro/astro/blob/main/packages/astro/CHANGELOG.md)
+<Discord title="У вас есть вопрос или вы хотите принять участие?" cta="Присоединяйтесь к нашему Discord"/>

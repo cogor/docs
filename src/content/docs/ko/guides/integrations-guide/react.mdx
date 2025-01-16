@@ -2,6 +2,8 @@
 type: integration
 title: '@astrojs/react'
 description: '@astrojs/react 프레임워크 통합을 사용하여 Astro 프로젝트에서 컴포넌트 지원을 확장하는 방법을 알아보세요.'
+sidebar:
+  label: React
 githubIntegrationURL: 'https://github.com/withastro/astro/tree/main/packages/integrations/react/'
 category: renderer
 i18nReady: true
@@ -9,7 +11,7 @@ i18nReady: true
 
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
 
-이 **[Astro 통합][astro-integration]** 을 통해 [React](https://react.dev/) 컴포넌트에 대한 서버 측 렌더링 및 클라이언트 측 하이드레이션이 가능해졌습니다.
+이 **[Astro 통합][astro-integration]** 을 통해 [React](https://react.dev/) 컴포넌트에 대한 렌더링 및 클라이언트 측 하이드레이션이 가능해졌습니다.
 
 ## 설치
 
@@ -59,22 +61,22 @@ Astro에는 공식 통합 설정을 자동화하는 `astro add` 명령이 포함
   </Fragment>
 </PackageManagerTabs>
 
-대부분의 패키지 관리자는 관련 피어 종속성도 설치합니다. Astro를 시작할 때 "Cannot find package 'react'" (또는 이와 유사한) 경고가 표시되면 `react` 및 `react-dom`을 설치해야 합니다.
+대부분의 패키지 관리자는 관련 피어 종속성도 설치합니다. Astro를 시작할 때 `Cannot find package 'react'` (또는 이와 유사한) 경고가 표시되면 `react`와 `react-dom` 및 타입 정의를 설치해야 합니다.
 
 <PackageManagerTabs>
   <Fragment slot="npm">
   ```sh
-  npm install react react-dom
+  npm install react react-dom @types/react @types/react-dom
   ```
   </Fragment>
   <Fragment slot="pnpm">
   ```sh
-  pnpm add react react-dom
+  pnpm add react react-dom @types/react @types/react-dom
   ```
   </Fragment>
   <Fragment slot="yarn">
   ```sh
-  yarn add react react-dom
+  yarn add react react-dom @types/react @types/react-dom
   ```
   </Fragment>
 </PackageManagerTabs>
@@ -89,6 +91,20 @@ export default defineConfig({
   // ...
   integrations: [react()],
 });
+```
+
+그리고 `tsconfig.json` 파일에 다음 코드를 추가하세요.
+
+```json title="tsconfig.json" ins={5-8}
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  }
+}
 ```
 
 ## 시작하기
@@ -153,7 +169,7 @@ import ReactComponent from './ReactComponent';
 
 예를 들어 특정 요소를 다른 위치에 배치할 수 있도록 하나 이상의 하위 요소가 전달될 것으로 *예상*하는 라이브러리를 사용하는 경우 이것이 차단 요인이 될 수 있습니다.
 
-실험적 플래그 `experimentalReactChildren`을 설정하여 Astro에게 항상 자식을 React vnode로 React에 전달하도록 지시할 수 있습니다. 여기에는 약간의 런타임 비용이 있지만 호환성에 도움이 될 수 있습니다.
+실험적 플래그 `experimentalReactChildren`을 설정하여 React의 자식 요소로 항상 React 가상 DOM 노드를 전달하도록 Astro에게 지시할 수 있습니다. 이는 약간의 런타임 비용이 있지만 호환성에 도움이 될 수 있습니다.
 
 React 통합 구성에서 이 옵션을 활성화할 수 있습니다.
 
@@ -173,4 +189,4 @@ export default defineConfig({
 
 [astro-integration]: /ko/guides/integrations-guide/
 
-[astro-ui-frameworks]: /ko/guides/framework-components/#프레임워크-컴포넌트-사용하기
+[astro-ui-frameworks]: /ko/guides/framework-components/#프레임워크-컴포넌트-사용

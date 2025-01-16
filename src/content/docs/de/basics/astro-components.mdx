@@ -1,32 +1,120 @@
 ---
 title: Komponenten
-description: Eine Einführung in die Syntax der .astro-Komponenten.
+description: Eine Einführung in die Astro-Komponenten.
+i18nReady: true
 ---
 
-**Astro-Komponenten** sind die Grundbausteine eines jeden Astro-Projekts. Sie sind reine HTML-Vorlagen ohne clientseitigen Laufzeit-Code.
+import ReadMore from '~/components/ReadMore.astro';
 
-Die Astro-Komponentensyntax ist eine Obermenge von HTML. Die Syntax wurde so konzipiert, dass sie jedem vertraut ist, der Erfahrung mit dem Schreiben von HTML oder JSX hat und bietet Unterstützung für die Verwendung von Komponenten und JavaScript-Ausdrücken. Du erkennst eine Astro-Komponente an ihrer Dateierweiterung: `.astro`.
+**Astro-Komponenten** sind die Grundbausteine eines jeden Astro-Projekts. Sie sind reine HTML-Vorlagenkomponenten ohne clientseitigen Laufzeit-Code und haben eine `.astro`-Dateiendung.
 
-Astro-Komponenten sind extrem flexibel. Oft enthält eine Astro-Komponente eine **wiederverwendbare Benutzeroberfläche der Seite**, wie z. B. eine Kopfzeile oder eine Profilkarte. In anderen Fällen kann eine Astro-Komponente einen kleineren HTML-Schnipsel enthalten, z. B. eine Sammlung üblicher `<meta>`-Tags, die die Suchmaschinenoptimierung erleichtern. Astro-Komponenten können sogar ein ganzes Seitenlayout enthalten.
+:::note
+Wenn du HTML kennst, weißt du bereits genug, um deine erste Astro-Komponente zu schreiben.
 
-Das Wichtigste an Astro-Komponenten ist, dass sie **während des Build-Prozesses zu HTML rendern**. Selbst wenn du JavaScript-Code in deinen Komponenten ausführst, wird dieser vorzeitig ausgeführt und von der endgültigen Seite, die an deine Nutzerinnen und Nutzer gesendet wird, entfernt. Das Ergebnis ist eine schnellere Seite, welche standardmäßig kein JavaScript enthält.
+<ReadMore>Erfahre mehr in der [Astro-Syntax-Referenz](/de/reference/astro-syntax/).</ReadMore>
+:::
 
-## Komponenten-Überblick
+Astro-Komponenten sind extrem flexibel. Eine Astro-Komponente kann so klein sein wie ein HTML-Schnipsel, z. B. eine Sammlung gängiger `<meta>`-Tags, die die Arbeit mit SEO vereinfachen. Komponenten können wiederverwendbare UI-Elemente sein, wie eine Kopfzeile oder eine Profilkarte. Astro-Komponenten können sogar ein ganzes Seitenlayout enthalten oder, wenn sie sich im speziellen Ordner `src/pages/` befinden, selbst eine ganze Seite sein.
 
-Eine Astro-Komponente besteht aus zwei Hauptteilen: dem **Komponentenskript** und der **Komponentenvorlage**. Jeder Teil erfüllt eine andere Aufgabe, aber zusammen sollen sie ein Gerüst bieten, das sowohl einfach zu benutzen als auch ausdrucksstark genug ist, um alles zu handhaben, was du bauen möchtest.
+Das Wichtigste, was du über Astro-Komponenten wissen musst, ist, dass sie **nicht auf dem Client gerendert werden**. Sie werden entweder während der Erstellung oder bei Bedarf in HTML gerendert. Du kannst JavaScript-Code in das Frontmatter deiner Komponente einfügen, der dann aus der endgültigen Seite, die an die Browser deiner Nutzer gesendet wird, entfernt wird. Das Ergebnis ist eine schnellere Website, die standardmäßig keinen JavaScript-Fußabdruck hinterlässt.
 
-```astro
+Wenn deine Astro-Komponente clientseitige Interaktivität benötigt, kannst du [Standard-HTML-`<script>`-Tags](/de/guides/client-side-scripts/) oder [UI-Framework-Komponenten](/de/guides/framework-components/#interaktive-komponenten-hydratisieren) als „Client-Inseln“ hinzufügen.
+
+## Komponentenstruktur
+
+Eine Astro-Komponente besteht aus zwei Hauptteilen: dem **Komponentenskript** und der **Komponentenvorlage**. Jeder Teil erfüllt eine andere Aufgabe, aber zusammen bilden sie ein Gerüst, das sowohl einfach zu bedienen als auch ausdrucksstark genug ist, um alles zu bewältigen, was du bauen möchtest.
+
+```astro title="src/components/LeereKomponente.astro"
 ---
 // Komponentenskript (JavaScript)
 ---
-<!-- Komponentenvorlage (HTML- + JS-Ausdrücke) -->
+<!-- Komponentenvorlage (HTML + JS-Ausdrücke) -->
 ```
 
-Du kannst Komponenten innerhalb anderer Komponenten verwenden, um mehr und fortschrittlichere Benutzeroberflächen zu erstellen. Zum Beispiel könnte eine `Button`-Komponente verwendet werden, um eine `ButtonGroup`-Komponente wie folgt zu erstellen:
+### Das Komponentenskript
 
-```astro
+Astro verwendet eine Code-Abgrenzung (Code Fence, `---`), um das Komponentenskript in deiner Astro-Komponente zu identifizieren. Wenn du schon einmal Markdown geschrieben hast, kennst du vielleicht ein ähnliches Konzept, das *Frontmatter* genannt wird. Astros Idee eines Komponentenskripts wurde direkt von diesem Konzept inspiriert.
+
+Du kannst das Komponentenskript verwenden, um jeden JavaScript-Code zu schreiben, den du zum Rendern deiner Vorlage benötigst. Dies kann Folgendes beinhalten:
+
+- das Importieren anderer Astro-Komponenten
+- das Importieren von Komponenten anderer Frameworks, wie z. B. React
+- das Importieren von Daten, wie z. B. einer JSON-Datei
+- das Abrufen von Inhalten aus einer API oder Datenbank
+- das Erstellen von Variablen, auf die du in deiner Vorlage verweisen wirst
+
+
+```astro title="src/components/MeineKomponente.astro
 ---
-// Beispiel: ButtonGroup.astro
+import IrgendeineAstroKomponente from '../components/IrgendeineAstroKomponente.astro';
+import IrgendeineReactKomponente from '../components/IrgendeineReactKomponente.jsx';
+import irgendwelcheDaten from '../data/pokemon.json';
+
+// Zugriff auf übergebene Props (Komponenteneigenschaften), wie z.B. `<X title="Hallo, Welt!" />`
+const { title } = Astro.props;
+// Abrufen externer Daten, auch aus einer privaten API oder Datenbank
+const data = await fetch('EINE_GEHEIME_API_URL/users').then(r => r.json());
+---
+<!-- Deine Vorlage hier! -->
+```
+
+Die Code-Abgrenzung soll garantieren, dass das von dir geschriebene JavaScript "eingezäunt" bleibt. Es wird nicht in deine Frontend-Anwendung entweichen oder in die Hände deiner Nutzerinnen und Nutzer gelangen. Du kannst hier bedenkenlos Code schreiben, der leistungsintensiv oder sensibel ist (wie z. B. eine Anfrage an deine private Datenbank), ohne dir Sorgen machen zu müssen, dass er jemals im Browser landet.
+
+:::tip
+Das Skript der Astro-Komponente ist TypeScript, mit dem du zusätzliche Syntax zu JavaScript für Editor-Tools und Fehlerprüfung hinzufügen kannst.
+
+<ReadMore>Lies mehr über die [eingebaute TypeScript-Unterstützung](/de/guides/typescript/) von Astro.</ReadMore>
+:::
+
+### Die Komponentenvorlage
+
+Unterhalb des Komponentenskripts befindet sich die Komponentenvorlage. Sie bestimmt die HTML-Ausgabe deiner Komponente.
+
+Wenn du hier einfaches HTML schreibst, wird deine Komponente dieses HTML auf jeder Astro-Seite rendern, auf der sie importiert und verwendet wird.
+
+Die [Syntax der Astro-Komponentenvorlage](/de/reference/astro-syntax/) unterstützt jedoch auch **JavaScript-Ausdrücke**, Astro-[`<style>`](/de/guides/styling/#styles-stile-in-astro) und [`<script>`](/de/guides/client-side-scripts/#verwendung-von-script-in-astro)-Tags, **importierte Komponenten** und [**spezielle Astro-Direktiven**](/de/reference/directives-reference/). Daten und Werte, die im Komponentenskript definiert werden, können in der Komponentenvorlage verwendet werden, um dynamisch erstelltes HTML zu erzeugen.
+
+```astro title="src/components/MeineLieblingspokemon.astro"
+---
+// Dein Komponentenskript hier!
+import Banner from '../components/Banner.astro';
+import Avatar from '../components/Avatar.astro';
+import ReactPokemonKomponente from '../components/ReactPokemonKomponente.jsx';
+const meineLieblingspokemon = [/* ... */];
+const { title } = Astro.props;
+---
+<!-- HTML-Kommentare werden unterstützt! -->
+{/* JS-Kommentarsyntax ist ebenfalls gültig! */}
+
+<Banner />
+<h1>Hallo, Welt!</h1>
+
+<!-- Verwende Props und andere Variablen aus dem Komponentenskript: -->
+<p>{title}</p>
+
+<!-- Verzögere das Rendering von Komponenten und biete Fallback-Ladeinhalte an: -->
+<Avatar server:defer>
+  <svg slot="fallback" class="generic-avatar" transition:name="avatar">...</svg>
+</Avatar>
+
+<!-- Binde andere UI-Framework-Komponenten mit einer `client:`-Direktive ein, um sie zu hydratisieren: -->
+<ReactPokemonKomponente client:visible />
+
+<!-- Mische HTML mit JavaScript-Ausdrücken, ähnlich wie bei JSX: -->
+<ul>
+  {meineLieblingspokemon.map((data) => <li>{data.name}</li>)}
+</ul>
+
+<!-- Verwende eine Vorlagendirektive, um Klassennamen aus mehreren Strings oder sogar Objekten zu erstellen! -->
+<p class:list={["add", "dynamic", {classNames: true}]} />
+```
+
+## Komponentenbasiertes Design
+
+Komponenten sind darauf ausgelegt, **wiederverwendbar** und **zusammensetzbar** zu sein. Du kannst Komponenten innerhalb anderer Komponenten nutzen, um immer komplexere Benutzeroberflächen zu erstellen. Zum Beispiel könnte eine `Button`-Komponente verwendet werden, um eine `ButtonGroup`-Komponente zu kreieren:
+
+```astro title="src/components/ButtonGroup.astro"
+---
 import Button from './Button.astro';
 ---
 <div>
@@ -36,216 +124,78 @@ import Button from './Button.astro';
 </div>
 ```
 
-### Das Komponentenskript
 
-Astro verwendet einen Code Fence (`---`), um das Komponentenskript in deiner Astro-Komponente zu identifizieren. Wenn du schon einmal Markdown geschrieben hast, kennst du vielleicht ein ähnliches Konzept, das *Frontmatter* genannt wird. Astros Idee eines Komponentenskripts wurde direkt von diesem Konzept inspiriert.
+## Props (Komponenteneigenschaften)
 
-Du kannst das Komponentenskript verwenden, um jeden JavaScript-Code zu schreiben, den du zum Rendern deiner Vorlage benötigst. Dies kann Folgendes beinhalten:
+Eine Astro-Komponente kann Props definieren und akzeptieren. Diese Props stehen dann der Komponentenvorlage zur Verfügung, um HTML zu rendern. Props sind im globalen Objekt `Astro.props` in deinem Frontmatter-Skript verfügbar.
 
-- Importieren anderer Astro-Komponenten
-- Importieren anderer Framework-Komponenten, wie z. B. React
-- Importieren von Daten, wie z. B. einer JSON-Datei
-- Abruf von Inhalten aus einer API oder Datenbank
-- Erstellen von Variablen, auf die du in deiner Vorlage verweisen wirst
+Hier ist ein Beispiel für eine Komponente, die eine `greeting`-Prop und eine `name`-Prop empfängt. Beachte, dass die zu empfangenden Props aus dem globalen `Astro.props`-Objekt destrukturiert werden.
 
-```astro
+```astro "Astro.props"
 ---
-// Hinweis: Die Importe müssen am Anfang der Datei stehen.
-import SomeAstroComponent from '../components/SomeAstroComponent.astro';
-import SomeReactComponent from '../components/SomeReactComponent.jsx';
-import someData from '../data/pokemon.json';
-
-// Zugriff auf übergebene Komponenteneigenschaften, wie z.B. `<X title="Hallo, Welt!" />`
-const {title} = Astro.props;
-// Abrufen externer Daten, auch aus einer privaten API oder Datenbank
-const data = await fetch('EINE_GEHEIME_API_URL/users').then(r => r.json());
----
-<!-- Deine Vorlage hier! -->
-```
-
-Der Code Fence soll garantieren, dass das von dir geschriebene JavaScript "eingezäunt" ist. Es wird nicht in deine Frontend-Anwendung entkommen oder in die Hände deiner Nutzerinnen und Nutzer fallen. Du kannst hier sicher Code schreiben, der teuer oder sensibel ist (z. B. eine Anfrage an deine private Datenbank), ohne dir Sorgen zu machen, dass er jemals im Browser landet.
-
-:::tip
-Du kannst sogar TypeScript in deinem Komponentenskript schreiben!
-:::
-
-### Die Komponentenvorlage
-
-Unterhalb des Komponentenskripts befindet sich die Komponentenvorlage. Die Komponentenvorlage bestimmt die HTML-Ausgabe deiner Komponente.
-
-Wenn du hier einfaches HTML schreibst, wird deine Komponente dieses HTML in jeder Astro-Seite darstellen, die sie importiert und verwendet.
-
-Die Syntax der Astro-Komponentenvorlagen unterstützt jedoch auch **JavaScript-Ausdrücke**, **importierte Komponenten** und [**spezielle Astro-Direktiven**](/de/reference/directives-reference/). Daten und Werte, die (zur Zeit der Seitenerstellung) im Komponentenskript definiert werden, können in der Komponentenvorlage verwendet werden, um dynamisch erstelltes HTML zu erzeugen.
-
-```astro
----
-// Dein Komponentenskript hier!
-import ReactPokemonComponent from '../components/ReactPokemonComponent.jsx';
-const myFavoritePokemon = [/* ... */];
----
-<!-- HTML-Kommentare werden unterstützt! -->
-
-<h1>Hallo, Welt!</h1>
-
-<!-- Verwende Eigenschaften und andere Variablen aus dem Komponentenskript: -->
-<p>Mein Lieblingspokemon ist: {Astro.props.title}</p>
-
-<!-- Einbindung anderer Komponenten mit einer "client:"-Anweisung zur Hydratisierung: -->
-<ReactPokemonComponent client:visible />
-
-<!-- Mische HTML mit JavaScript-Ausdrücken, ähnlich wie bei JSX: -->
-<ul>
-  {myFavoritePokemon.map((data) => <li>{data.name}</li>)}
-<ul>
-
-<!-- Verwende eine Vorlagendirektive, um eine unescapte HTML-Zeichenkette in ein Element einzufügen: -->
-<p set:html={rawHTMLString} />
-```
-
-### JSX-Ausdrücke
-
-Du kannst lokale Variablen innerhalb des Frontmatter-Komponentenskripts einer Astro-Komponente definieren. Diese Variablen können dann unter Verwendung von JSX-Ausdrücken in die HTML-Vorlage der Komponente eingefügt werden.
-
-#### Variablen
-
-Lokale Variablen können zum HTML-Code hinzugefügt werden, indem der Variablenname in geschweifte Klammern gesetzt wird:
-
-```astro
----
-const name = "Astro";
----
-<div>
-  <h1>Hallo {name}!</h1>  <!-- Ausgabe: <h1>Hallo Astro!</h1> -->
-</div>
-```
-
-#### Dynamische Attribute
-
-Lokale Variablen können in geschweiften Klammern verwendet werden, um Attributwerte sowohl an HTML-Elemente als auch an Komponenten zu übergeben:
-
-```astro
----
-const name = "Astro";
----
-<h1 class={name}>Attributausdrücke werden unterstützt</h1>
-
-<MyComponent templateLiteralNameAttribute={`MeinNameIst${name}`} />
-```
-
-#### Dynamisches HTML
-
-Lokale Variablen können in JSX-ähnlichen Funktionen verwendet werden, um dynamisch generierte HTML-Elemente zu erzeugen:
-
-```astro
----
-const items = ["Hunde", "Katzen", "Schnabeltiere"];
----
-<ul>
-  {items.map((item) => (
-    <li>{item}</li>
-  ))}
-</ul>
-```
-
-#### Fragmente und mehrere Elemente
-
-Im Gegensatz zu JavaScript oder JSX kann eine Astro-Komponentenvorlage mehrere Elemente darstellen, ohne dass alles in ein einziges `<div>` oder `<>` verpackt werden muss.
-
-```astro
----
-// Vorlage mit mehreren Elementen
----
-<p>Es ist nicht erforderlich, Elemente in einen einzelnen Container zu verpacken.</p>
-<p>Astro unterstützt mehrere Stammelemente in einer Vorlage.</p>
-```
-
-Wenn du jedoch einen Ausdruck verwendest, um dynamisch Elemente zu erstellen, solltest du diese mehreren Elemente mit einem **Fragment** umhüllen, genau wie du es in JavaScript oder JSX tun würdest. In Astro kannst du dazu entweder `<Fragment> </Fragment>` oder die Kurzform `<> </>` verwenden.
-
-```astro
----
-const items = ["Hunde", "Katzen", "Schnabeltiere"];
----
-<ul>
-  {items.map((item) => (
-    <>
-      <li>Rote {item}</li>
-      <li>Blaue {item}</li>
-      <li>Grüne {item}</li>
-    </>
-  ))}
-</ul>
-```
-
-Fragmente können auch nützlich sein, um Container-Elemente bei der Verwendung von [`set:*`-Direktiven](/de/reference/directives-reference/#sethtml) zu vermeiden, so wie im folgenden Beispiel:
-
-```astro
----
-const htmlString = '<p>Roher HTML-Inhalt</p>';
----
-<Fragment set:html={htmlString} />
-```
-
-### Komponenteneigenschaften (Props)
-
-Eine Astro-Komponente kann Eigenschaften definieren und akzeptieren. Diese Eigenschaften stehen dann der Komponentenvorlage für die Darstellung von HTML zur Verfügung. Eigenschaften sind im globalen Objekt `Astro.props` in deinem Frontmatter-Skript verfügbar.
-
-Hier ist ein Beispiel für eine Komponente, die die Eigenschaften `greeting` und `name` empfängt. Beachte, dass die zu empfangenden Eigenschaften aus dem globalen Objekt `Astro.props` destrukturiert werden.
-
-```astro
----
-// Beispiel: GreetingHeadline.astro
-// Verwendung: <GreetingHeadline greeting="Guten Tag" name="Partner" />
-const { greeting, name } = Astro.props
+// src/components/GreetingHeadline.astro
+// Verwendung: <GreetingHeadline greeting="Howdy" name="Partner" />
+const { greeting, name } = Astro.props;
 ---
 <h2>{greeting}, {name}!</h2>
 ```
 
-Du kannst deine Eigenschaften auch mit TypeScript definieren, indem du ein Typ-Interface `Props` exportierst. Astro übernimmt automatisch jedes exportierte `Props`-Interface und gibt Typ-Warnungen/Fehler für dein Projekt aus. Diese Eigenschaften können auch mit Standardwerten versehen werden, wenn sie aus `Astro.props` destrukturiert werden.
+Diese Komponente, wenn in anderen Astro-Komponenten, Layouts oder Seiten importiert und gerendert, kann diese Props als Attribute weitergeben:
 
-```astro
+```astro /(\w+)=\S+/
+---
+// src/components/GreetingCard.astro
+import GreetingHeadline from './GreetingHeadline.astro';
+const name = 'Astro';
+---
+<h1>Greeting Card</h1>
+<GreetingHeadline greeting="Hi" name={name} />
+<p>Ich hoffe, du hast einen wunderbaren Tag!</p>
+```
+
+Du kannst deine Props auch mit TypeScript definieren, indem du ein Typ-Interface `Props` exportierst. Astro übernimmt automatisch jedes exportierte `Props`-Interface und gibt Typ-Warnungen/Fehler für dein Projekt aus. Diese Props können auch mit Standardwerten versehen werden, wenn sie aus `Astro.props` destrukturiert werden.
+
+```astro ins={3-6}
 ---
 // src/components/GreetingHeadline.astro
-export interface Props {
+interface Props {
   name: string;
   greeting?: string;
 }
 
-const { greeting = "Hallo", name } = Astro.props as Props;
+const { greeting = "Hallo", name } = Astro.props;
 ---
 <h2>{greeting}, {name}!</h2>
 ```
 
-Wenn diese Komponente importiert und in anderen Astro-Komponenten, Layouts oder Seiten gerendert wird, können diese Eigenschaften als Attribute übergeben werden:
+Props können Standardwerte erhalten, die verwendet werden, wenn keine Werte bereitgestellt sind.
 
-```astro
+```astro ins="= \"Hallo\"" ins="= \"Astronaut\""
 ---
-// src/components/GreetingCard.astro
-import GreetingHeadline from './GreetingHeadline.astro';
-const name = "Astro"
+// src/components/GreetingHeadline.astro
+const { greeting = "Hallo", name = "Astronaut" } = Astro.props;
 ---
-<h1>Grußkarte</h1>
-<GreetingHeadline greeting="Hey" name={name} />
-<p>Ich hoffe, du hast einen schönen Tag!</p>
+<h2>{greeting}, {name}!</h2>
 ```
 
-### Slots
+## Slots
 
 Das `<slot />`-Element ist ein Platzhalter für externe HTML-Inhalte, der es dir ermöglicht, untergeordnete Elemente aus anderen Dateien in deine Komponentenvorlage einzubinden.
 
 Standardmäßig werden alle untergeordneten Elemente, die an eine Komponente übergeben werden, in ihrem `<slot />` gerendert.
 
 :::note
-Im Gegensatz zu *Eigenschaften*, die als Attribute an eine Astro-Komponente  übergeben werden und dort überall mit `Astro.props` verwendet werden können, werden *Slots* als untergeordnete Elemente übergeben und dort gerendert, wo du `<slot />` in der Komponentenvorlage verwendest.
+Im Gegensatz zu _Props_, die als Attribute an eine Astro-Komponente übergeben werden und dort überall mit `Astro.props` verwendet werden können, werden _Slots_ als untergeordnete Elemente übergeben und dort gerendert, wo du `<slot />` in der Komponentenvorlage verwendest.
 :::
 
-```astro
+```astro "<slot />"
 ---
 // src/components/Wrapper.astro
 import Header from './Header.astro';
 import Logo from './Logo.astro';
 import Footer from './Footer.astro';
 
-const { title } = Astro.props
+const { title } = Astro.props;
 ---
 <div id="content-wrapper">
   <Header />
@@ -256,7 +206,7 @@ const { title } = Astro.props
 </div>
 ```
 
-```astro
+```astro {6-7}
 ---
 // src/pages/fred.astro
 import Wrapper from '../components/Wrapper.astro';
@@ -269,61 +219,108 @@ import Wrapper from '../components/Wrapper.astro';
 
 Dieses Muster ist die Grundlage einer Astro-Layout-Komponente: Eine ganze Seite mit HTML-Inhalt kann mit `<Layout></Layout>`-Tags „umhüllt“ und an die Layout-Komponente gesendet werden, um innerhalb der allgemeinen Seitenelemente gerendert zu werden.
 
-#### Benannte Slots
+
+
+### Benannte Slots
 
 Eine Astro-Komponente kann auch benannte Slots haben. Dadurch kannst du nur HTML-Elemente mit dem entsprechenden Slot-Namen an die Position eines Slots übergeben.
 
-```astro
+Slots werden mit dem `name`-Attribut benannt:
+
+```astro /<slot .*?/>/
 ---
 // src/components/Wrapper.astro
 import Header from './Header.astro';
 import Logo from './Logo.astro';
 import Footer from './Footer.astro';
 
-const { title } = Astro.props
+const { title } = Astro.props;
 ---
 <div id="content-wrapper">
   <Header />
-  <slot name="after-header"/>  <!-- Untergeordnete Elemente mit dem `slot="after-header"`-Attribut werden hier angezeigt -->
+  <slot name="after-header" />  <!-- Untergeordnete Elemente mit dem `slot="after-header"`-Attribut werden hier angezeigt -->
   <Logo />
   <h1>{title}</h1>
   <slot />  <!-- Untergeordnete Elemente ohne `slot`, oder mit `slot="default"`-Attribut werden hier angezeigt -->
   <Footer />
-  <slot name="after-footer"/>  <!-- Untergeordnete Elemente mit dem `slot="after-footer"`-Attribut werden hier angezeigt -->
+  <slot name="after-footer" />  <!-- Untergeordnete Elemente mit dem `slot="after-footer"`-Attribut werden hier angezeigt -->
 </div>
 ```
 
-```astro
+Um HTML-Inhalt in einen bestimmten Slot einzufügen, verwende das `slot`-Attribut auf jedem untergeordneten Element, um den Namen des Slots zu spezifizieren. Alle anderen untergeordneten Elemente der Komponente werden in den Standard- (unbenannten) <slot /> eingefügt.
+
+```astro /slot=".*?"/
 ---
 // src/pages/fred.astro
 import Wrapper from '../components/Wrapper.astro';
 ---
 <Wrapper title="Freds Seite">
-  <img src="https://my.photo/fred.jpg" slot="after-header">
+  <img src="https://my.photo/fred.jpg" slot="after-header" />
   <h2>Alles über Fred</h2>
   <p>Hier findest du einige Informationen über Fred.</p>
   <p slot="after-footer">Copyright 2022</p>
 </Wrapper>
 ```
 
-Verwende ein `slot="my-slot"`-Attribut auf dem untergeordneten Element, das du an einen passenden `<slot name="my-slot" />`-Platzhalter in deiner Komponente weiterleiten willst.
+:::tip
+Verwende ein `slot="mein-slot"`-Attribut auf dem untergeordneten Element, das du an einen passenden `<slot name="mein-slot" />`-Platzhalter in deiner Komponente weiterleiten willst.
+:::
+
+Um mehrere HTML-Elemente ohne ein umschließendes `<div>` in den `<slot/>`-Platzhalter einer Komponente zu übergeben, verwende das `slot=""`-Attribut auf [Astros <Fragment/>-Komponente](/de/reference/astro-syntax/#fragmente):
+
+
+```astro title="src/components/CustomTable.astro" '<slot name="header" />' '<slot name="body" />'
+---
+// Erstelle eine benutzerdefinierte Tabelle mit benannten Slot-Platzhaltern für Head- und Bodyinhalt
+---
+<table class="bg-white">
+  <thead class="sticky top-0 bg-white"><slot name="header" /></thead>
+  <tbody class="[&_tr:nth-child(odd)]:bg-gray-100"><slot name="body" /></tbody>
+</table>
+```
+
+Füge mehrere Zeilen und Spalten an HTML-Inhalten ein, indem du ein `slot=""`-Attribut verwendest, um die Inhalte `"header"` und `"body"` zu spezifizieren. Einzelne HTML-Elemente können auch gestylt werden:
+
+```astro title="src/components/StockTable.astro" {5-7, 9-13} '<Fragment slot="header">' '<Fragment slot="body">'
+---
+import CustomTable from './CustomTable.astro';
+---
+<CustomTable>
+  <Fragment slot="header"> <!-- Übergib die Tabellenkopfzeile -->
+    <tr><th>Produktname</th><th>Lagerbestand</th></tr>
+  </Fragment>
+
+  <Fragment slot="body"> <!-- Übergib den Tabellenkörper -->
+    <tr><td>Flip-flops</td><td>64</td></tr>
+    <tr><td>Stiefel</td><td>32</td></tr>
+    <tr><td>Sneakers</td><td class="text-red-500">0</td></tr>
+  </Fragment>
+</CustomTable>
+```
+
+Beachte, dass benannte Slots ein unmittelbar untergeordnetes Element der Komponente sein müssen. Du kannst benannte Slots nicht durch verschachtelte Elemente durchreichen.
 
 :::tip
 Benannte Slots können auch an [UI-Framework-Komponenten](/de/guides/framework-components/) übergeben werden.
 :::
 
-#### Fallback-Inhalte für Slots
+
+:::note
+Es ist nicht möglich, einen Astro-Slotnamen dynamisch zu generieren, wie etwa innerhalb einer Map-Funktion. Wenn diese Funktion innerhalb von UI-Framework-Komponenten benötigt wird, ist es möglicherweise am besten, diese dynamischen Slots innerhalb des Frameworks selbst zu generieren.
+:::
+
+### Fallback-Inhalte für Slots
 
 Slots können auch **Fallback-Inhalte** wiedergeben. Wenn es keine passenden untergeordneten Elemente gibt, die an einen Slot übergeben werden, wird ein `<slot />` Element seine eigenen Platzhalter-Elemente anzeigen.
 
-```astro
+```astro {14}
 ---
 // src/components/Wrapper.astro
 import Header from './Header.astro';
 import Logo from './Logo.astro';
 import Footer from './Footer.astro';
 
-const { title } = Astro.props
+const { title } = Astro.props;
 ---
 <div id="content-wrapper">
   <Header />
@@ -337,95 +334,74 @@ const { title } = Astro.props
 </div>
 ```
 
-### CSS-Stile
+Fallback-Inhalte werden nur angezeigt, wenn es keine passenden Elemente mit dem Attribut slot="name" gibt, die an einen benannten Slot übergeben werden.
 
-Die Einbindung von CSS-Stilen über `<style>`-Tags wird auch innerhalb der Komponentenvorlage unterstützt.
+Astro übergibt einen leeren Slot, wenn zwar ein Slot-Element existiert, aber kein Inhalt übergeben werden soll. Fallback-Inhalte können nicht als Standard verwendet werden, wenn ein leerer Slot übergeben wird. Fallback-Inhalte werden nur angezeigt, wenn kein Slot-Element gefunden werden kann.
 
-Sie können zur Gestaltung deiner Komponenten verwendet werden. Alle Stilregeln werden automatisch auf die Komponente selbst beschränkt, um CSS-Konflikte in großen Anwendungen zu vermeiden.
+### Slots weitergeben
 
-```astro
+Slots können an andere Komponenten weitergegeben werden. Dies ist zum Beispiel nützlich, wenn verschachtelte Layouts erstellt werden:
+
+```astro title="src/layouts/BaseLayout.astro" {9,12}
 ---
-// Dein Komponentenskript hier!
 ---
-<style>
-  /* Beschränkt auf diese Komponente, andere H1s
-     auf der Seite bleiben unverändert */
-  h1 { color: red }
-</style>
-
-<h1>Hallo, Welt!</h1>
+<html lang="de">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+    <slot name="head" />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
 ```
 
-:::caution
-Die hier definierten Stile gelten nur für Inhalte, die direkt in die Vorlage der Komponente geschrieben wurden. Untergeordnete Elemente und importierte Komponenten werden standardmäßig **nicht** beeinflusst.
-:::
-
-📚 Weitere Informationen zur Anwendung von Stilen findest du unter [Stile & CSS](/de/guides/styling/).
-
-### Clientseitige Skripte
-
-Um JavaScript an den Browser zu senden, ohne [eine Framework-Komponente](/de/guides/framework-components/) (React, Svelte, Vue, Preact, SolidJS, AlpineJS, Lit) oder eine [Astro-Integration](https://astro.build/integrations/) (z.B. astro-XElement) zu verwenden, kannst du ein `<script>`-Tag in deiner Astro-Komponentenvorlage verwenden und JavaScript an den Browser senden, das auf globaler Ebene ausgeführt wird.
-
-Standardmäßig werden `<script>`-Tags von Astro verarbeitet:
-
-- Alle Importe werden gebündelt, sodass sie lokale Dateien oder Node-Module importieren können.
-- Das verarbeitete Skript wird in den `<head>` deiner Seite mit [`type="module"`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) eingefügt.
-- Wenn deine Komponente mehrmals auf einer Seite verwendet wird, wird das Skript-Tag nur einmal eingefügt.
-
-:::caution
-Du kannst TypeScript derzeit nicht in clientseitigen Skripten nutzen, aber du kannst eine TypeScript-Datei importieren, wenn du diese Syntax bevorzugst.
-:::
-
-```astro
-<script>
-  // Verarbeitet! Gebündelt! ESM-Importe funktionieren,
-  // auch für npm-Pakete.
-</script>
+```astro {6,7}
+// src/layouts/HomeLayout.astro
+---
+import BaseLayout from './BaseLayout.astro';
+---
+<BaseLayout>
+  <slot name="head" slot="head" />
+  <slot />
+</BaseLayout>
 ```
-
-Um die Bündelung des Skripts zu vermeiden, kannst du das Attribut `is:inline` verwenden.
-
-```astro
-<script is:inline>
-  // Wird unverändert in den HTML-Code übernommen!
-  // ESM-Importe werden nicht relativ zur Datei aufgelöst.
-</script>
-```
-
-Mehrere `<script>`-Tags können in derselben `astro`-Datei mit einer beliebigen Kombination der oben genannten Methoden verwendet werden.
 
 :::note
-Das Hinzufügen von `type="module"` oder eines anderen Attributs zu einem `<script>`-Tag deaktiviert das Standard-Bündelungsverhalten von Astro und behandelt den Tag, als ob er eine `is:inline`-Direktive hätte.
+Benannte Slots können an eine andere Komponente weitergegeben werden, indem sowohl das `name`- als auch das `slot`-Attribut auf einem `<slot />`-Tag verwendet werden.
 :::
 
-📚 Siehe unsere [Direktiven-Referenz](/de/reference/directives-reference/#script--style-directives) für weitere Informationen über die Direktiven, die für `<script>`-Tags verfügbar sind.
-
-#### Laden externer Skripte
-
-**Wann dies genutzt werden sollte:** Wenn deine JavaScript-Datei innerhalb von `public/` liegt.
-
-Beachte, dass dieser Ansatz die JavaScript-Verarbeitung, die Bündelung und die Optimierungen überspringt, die von Astro bereitgestellt werden, wenn du die unten beschriebene `import`-Methode verwendest.
+So werden der Standard- und `head`-Slot, die an `HomeLayout` übergeben wurden, an das übergeordnete `BaseLayout` weitergegeben.
 
 ```astro
-// Absoluter URL-Pfad
-<script is:inline src="/irgendein-externes-skript.js"></script>
+// src/pages/index.astro
+---
+import HomeLayout from '../layouts/HomeLayout.astro';
+---
+<HomeLayout>
+	<title slot="head">Astro</title>
+	<h1>Astro</h1>
+</HomeLayout>
+
 ```
 
-#### Verwendung von Hoisted Scripts
+## HTML-Komponenten
 
-**Wann dies genutzt werden sollte:** Wenn dein externes Skript innerhalb von `src/` liegt *und* es den ESM-Modultyp unterstützt.
+Astro unterstützt das Importieren und Verwenden von `.html`-Dateien als Komponenten oder das Platzieren dieser Dateien im Unterverzeichnis `src/pages/` als Seiten. Die Verwendung von HTML-Komponenten kann sinnvoll sein, wenn du Code von einer bestehenden Website wiederverwenden möchtest, die ohne ein Framework gebaut wurde, oder wenn du sicherstellen willst, dass deine Komponente keine dynamischen Funktionen hat.
 
-Astro erkennt diese clientseitigen JavaScript-Importe und erstellt, optimiert und fügt das JS automatisch in die Seite ein.
+HTML-Komponenten müssen ausschließlich gültiges HTML enthalten und verfügen daher nicht über Schlüsselfunktionen von Astro-Komponenten:
 
-```astro
-// ESM-Import
-<script>
-  import './irgendein-externes-skript.js';
-</script>
-```
+- Sie unterstützen kein Frontmatter, keine serverseitigen Importe oder dynamische Ausdrücke.
+- Jegliche `<script>`-Tags werden nicht gebündelt und so behandelt, als hätten sie die `is:inline`-Direktive.
+- Sie können nur auf [Assets verweisen, die sich im `public/`-Ordner befinden](/de/basics/project-structure/#public).
+
+:::note
+Ein [`<slot />`-Element](/de/basics/astro-components/#slots) innerhalb einer HTML-Komponente funktioniert so, wie es in einer Astro-Komponente funktionieren würde. Um stattdessen das [HTML-Webkomponenten-Slot-Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/slot) zu verwenden, füge deinem `<slot>`-Element `is:inline` hinzu.
+:::
 
 ## Nächste Schritte
 
-📚 Lies über [Astros eingebaute Komponenten](/de/reference/api-reference/#eingebaute-komponenten).
-
-📚 Erfahre mehr über die Verwendung von [JavaScript-Framework-Komponenten](/de/guides/framework-components/) in deinem Astro-Projekt.
+<ReadMore>Lies mehr über die Verwendung von [UI-Framework-Komponenten](/de/guides/framework-components/) in deinem Astro-Projekt.</ReadMore>

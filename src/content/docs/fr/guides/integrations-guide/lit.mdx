@@ -1,188 +1,24 @@
 ---
-type: integration
-title: '@astrojs/lit'
-description: "Apprenez à utiliser l'intégration du framework @astrojs/lit pour élargir la prise en charge des composants dans votre projet Astro."
-githubIntegrationURL: 'https://github.com/withastro/astro/tree/main/packages/integrations/lit/'
-category: renderer
+title: 'Lit'
+description: Utiliser Lit pour étendre la prise en charge des composants dans votre projet Astro.
+sidebar:
+  label: Lit
 i18nReady: true
 ---
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
 
-Cette **[intégration Astro][astro-integration]** permet un rendu côté serveur et une hydratation côté client pour vos éléments personnalisés [Lit](https://lit.dev/).
-
-## Installation
-
-Astro inclut une commande `astro add` pour automatiser l'installation des intégrations officielles. Si vous préférez, vous pouvez [installer les intégrations manuellement](#installation-manuelle) à la place.
-
-Pour installer `@astrojs/lit`, exécutez ce qui suit depuis le répertoire de votre projet et suivez les instructions :
-
-<PackageManagerTabs>
-  <Fragment slot="npm">
-    ```sh
-    npx astro add lit
-    ```
-  </Fragment>
-  <Fragment slot="pnpm">
-    ```sh
-    pnpm astro add lit
-    ```
-  </Fragment>
-  <Fragment slot="yarn">
-    ```sh
-    yarn astro add lit
-    ```
-  </Fragment>
-</PackageManagerTabs>
-
-Si vous rencontrez des problèmes, [n'hésitez pas à nous les signaler sur GitHub](https://github.com/withastro/astro/issues) et essayez les étapes d'installation manuelle ci-dessous.
-
-### Installation manuelle
-
-Tout d'abord, installez le paquet `@astrojs/lit` :
-
-<PackageManagerTabs>
-  <Fragment slot="npm">
-    ```sh
-    npm install @astrojs/lit
-    ```
-  </Fragment>
-  <Fragment slot="pnpm">
-    ```sh
-    pnpm add @astrojs/lit
-    ```
-  </Fragment>
-  <Fragment slot="yarn">
-    ```sh
-    yarn add @astrojs/lit
-    ```
-  </Fragment>
-</PackageManagerTabs>
-
-La plupart des gestionnaires de paquets installent également les dépendances associées. Si vous voyez un avertissement "Cannot find package 'lit'" (ou similaire) lorsque vous démarrez Astro, vous devrez installer `lit` et `@webcomponents/template-shadowroot` :
-
-<PackageManagerTabs>
-  <Fragment slot="npm">
-    ```sh
-    npm install lit @webcomponents/template-shadowroot
-    ```
-  </Fragment>
-  <Fragment slot="pnpm">
-    ```sh
-    pnpm add lit @webcomponents/template-shadowroot
-    ```
-  </Fragment>
-  <Fragment slot="yarn">
-    ```sh
-    yarn add lit @webcomponents/template-shadowroot
-    ```
-  </Fragment>
-</PackageManagerTabs>
-
-Ensuite, appliquez l'intégration à votre fichier `astro.config.*` en utilisant la propriété `integrations` :
-
-```js ins={2} ins="lit()" title="astro.config.mjs"
-import { defineConfig } from 'astro/config';
-import lit from '@astrojs/lit';
-
-export default defineConfig({
-  // ...
-  integrations: [lit()],
-});
-```
-
-## Démarrage
-
-Pour utiliser votre premier composant Lit dans Astro, consultez notre [documentation sur les Frameworks UI][astro-ui-frameworks]. Ceci explique :
-
-* 📦 comment les composants du Framework sont chargés,
-* 💧 les options d'hydratation côté client, et
-* 🤝 les possibilités de mélanger et d'imbriquer les Frameworks.
-
-L'écriture et l'importation d'un composant Lit dans Astro se présentent comme suit :
-
-```js title="src/components/my-element.js"
-import { LitElement, html } from 'lit';
-
-export class MyElement extends LitElement {
-  render() {
-    return html`<p>Hello le monde! Depuis my-element</p>`;
-  }
-}
-
-customElements.define('my-element', MyElement);
-```
-
-Le composant est maintenant prêt à être importé via le frontmatter Astro :
-
-```astro title="src/pages/index.astro"
----
-import { MyElement } from '../components/my-element.js';
----
-
-<MyElement />
-```
-
-:::note
-Lit nécessite la présence de variables globales du navigateur tel que `HTMLElement` et `customElements`. Pour cette raison, le moteur de rendu Lit adapte le serveur avec ces éléments globaux pour que Lit puisse fonctionner. Il se peut que vous rencontriez des bibliothèques qui fonctionnent mal à cause de cela.
+:::caution[Obsolète]
+Cette intégration Astro permettant un rendu à la demande et une hydratation côté client pour vos éléments personnalisés [Lit](https://lit.dev/) a été supprimée dans Astro 5.0.
 :::
 
-### Polyfills et hydratation
-
-Le moteur de rendu gère automatiquement l'ajout des polyfills appropriés pour le support des navigateurs qui n'ont pas Declarative Shadow DOM. Le polyfill fait environ *1.5kB*. Si le navigateur supporte Declarative Shadow DOM, moins de 250 octets sont chargés (pour détecter le support).
-
-L'hydratation est également gérée automatiquement. Vous pouvez utiliser les mêmes directives d'hydratation telles que `client:load`, `client:idle` et `client:visible` que vous pouvez utiliser avec d'autres bibliothèques supportées par Astro.
+Vous pouvez continuer à utiliser Lit pour les composants client en ajoutant une balise de script côté client. Par exemple :
 
 ```astro
----
-import { MyElement } from '../components/my-element.js';
----
+<script>
+  import "../components/MyTabs";
+</script>
 
-<MyElement client:visible />
+<my-tabs title="Voici mes onglets">...</my-tabs>
 ```
 
-Ce qui précède ne chargera le JavaScript de l'élément que lorsque qu'il sera visible par l'utilsateur. Comme il s'agit d'un rendu serveur, l'utilisateur ne verra pas de jank ; le chargement et l'hydratation se feront de manière transparente.
-
-## Dépannage
-
-Pour obtenir de l'aide, consultez le canal `#support` sur [Discord](https://astro.build/chat). Nos sympathiques membres de l'équipe d'assistance sont là pour vous aider !
-
-Vous pouvez également consulter notre [Documentation d'intégration Astro][astro-integration] pour plus d'informations sur les intégrations.
-
-Les problèmes courants sont listés ci-dessous :
-
-### Éléments globaux du navigateur
-
-Le SSR de l'intégration Lit fonctionne en ajoutant quelques propriétés globales du navigateur à l'environnement global. Certaines des propriétés ajoutées incluent `window`, `document`, et `location`.
-
-Ces propriétés globales *peuvent* interférer avec d'autres bibliothèques qui pourraient utiliser l'existence de ces variables pour détecter qu'elles s'exécutent dans le navigateur, alors qu'elles s'exécutent en fait dans le serveur. Cela peut provoquer des bogues avec ces bibliothèques.
-
-Pour cette raison, l'intégration de Lit peut ne pas être compatible avec ces types de bibliothèques. Une chose qui peut aider est de changer l'ordre des intégrations lorsque Lit interfère avec d'autres intégrations :
-
-```js lang="js" title="astro.config.mjs" ins={7} del={6}
-  import { defineConfig } from 'astro/config';
-  import vue from '@astrojs/vue';
-  import lit from '@astrojs/lit';
-
-  export default defineConfig({
-    integrations: [vue(), lit()]
-    integrations: [lit(), vue()]
-  });
-```
-
-L'ordre correct peut être différent en fonction de la cause fondamentale du problème. Cependant, il n'est pas garanti que cela corrige tous les problèmes, et certaines bibliothèques ne peuvent pas être utilisées si vous utilisez l'intégration Lit.
-
-### Gestionnaires de paquets stricts
-
-Lorsque vous utilisez un [gestionnaire de paquets strict](https://pnpm.io/pnpm-vs-npm#npms-flat-tree) comme `pnpm`, vous pouvez obtenir une erreur telle que `ReferenceError : module is not defined` lors de l'exécution de votre site. Pour remédier à ce problème, hissez les dépendances Lit avec un fichier `.npmrc` :
-
-```ini title=".npmrc"
-public-hoist-pattern[]=*lit*
-```
-
-### Limites
-
-L'intégration Lit est alimentée par `@lit-labs/ssr` qui a quelques limitations. Voir leur [documentation sur les limitations](https://www.npmjs.com/package/@lit-labs/ssr#user-content-notes-and-limitations) pour en savoir plus.
-
-[astro-integration]: /fr/guides/integrations-guide/
-
-[astro-ui-frameworks]: /fr/guides/framework-components/#utilisation-des-composants-de-framework
+Si vous souhaitez maintenir vous-même une intégration Lit, vous pouvez utiliser la [dernière version publiée de `@astrojs/lit`](https://github.com/withastro/astro/tree/astro%404.13.0/packages/integrations/lit) comme point de départ et mettre à jour les paquets appropriés.

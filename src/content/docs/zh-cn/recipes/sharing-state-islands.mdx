@@ -1,5 +1,5 @@
 ---
-title: 状态共享
+title: 群岛间的状态共享
 description: 学习如何使用 Nano Stores 在框架组件之间共享状态
 i18nReady: true
 type: recipe
@@ -35,7 +35,7 @@ Astro 推荐了一个不同的客户端共享存储的解决方案： [**Nano St
 <details>
 <summary>**🙋 我可以在 `.astro` 文件中或者其他服务端组件使用 Nano Stores 吗？**</summary>
 
-Nano Stores 能被服务端组件导入、写入和读取信息，**但是我们并不推荐这样做！** 这是由于一些限制：
+Nano Stores 可以在 `<script>` 标签中使用，以[在 `.astro` 组件之间共享状态](/zh-cn/recipes/sharing-state/)。然而，不推荐在服务端组件的 frontmatter 中使用 Nano Stores，原因如下：
 - 从一个 `.astro` 文件或者 [非激活组件](/zh-cn/guides/framework-components/#激活组件) 写入状态库将不会影响 [客户端组件](/zh-cn/reference/directives-reference/#客户端指令) 值的获取。
 - 你不能将 Nano Store 作为一个 "prop" 传递给客户端组件。
 - 你不能从一个 `.astro` 文件中订阅状态库变化，因为 Astro 组件不会重新渲染。
@@ -104,11 +104,7 @@ b）你想要在 Svelte 和其他 UI 框架如 Preact 或者 Vue 之间进行通
   npm i nanostores @nanostores/vue
   ```
   </Fragment>
-  <Fragment slot="lit">
-  ```shell
-  npm install nanostores @nanostores/lit
-  ```
-  </Fragment>
+
 </UIFrameworkTabs>
 
 你可以跳转到 [Nano Stores 使用指南](https://github.com/nanostores/nanostores#guide) 或者跟随我们下面的例子！
@@ -247,27 +243,7 @@ export default function CartButton() {
 </script>
 ```
 </Fragment>
-<Fragment slot="lit">
-```ts
-// src/components/CartFlyoutToggle.ts
-import { LitElement, html } from 'lit';
-import { isCartOpen } from '../cartStore';
 
-export class CartFlyoutToggle extends LitElement {
-  handleClick() {
-    isCartOpen.set(!isCartOpen.get());
-  }
-
-  render() {
-    return html`
-      <button @click="${this.handleClick}">Cart</button>
-    `;
-  }
-}
-
-customElements.define('cart-flyout-toggle', CartFlyoutToggle);
-```
-</Fragment>
 </UIFrameworkTabs>
 
 然后，我们可以从我们的 `CartFlyout` 组件中读取 `isCartOpen` 值：
@@ -339,25 +315,7 @@ export default function CartFlyout() {
 </script>
 ```
 </Fragment>
-<Fragment slot="lit">
-```ts
-// src/components/CartFlyout.ts
-import { isCartOpen } from '../cartStore';
-import { LitElement, html } from 'lit';
-import { StoreController } from '@nanostores/lit';
 
-export class CartFlyout extends LitElement {
-  private cartOpen = new StoreController(this, isCartOpen);
-
-  render() {
-    return this.cartOpen.value ? html`<aside>...</aside>` : null;
-  }
-}
-
-customElements.define('cart-flyout', CartFlyout);
-
-```
-</Fragment>
 </UIFrameworkTabs>
 
 ### 使用 "maps"
@@ -603,41 +561,7 @@ export default function AddToCartForm({ children }) {
 </script>
 ```
 </Fragment>
-<Fragment slot="lit">
-```ts
-// src/components/AddToCartForm.ts
-import { LitElement, html } from 'lit';
-import { isCartOpen, addCartItem } from '../cartStore';
 
-export class AddToCartForm extends LitElement {
-  static get properties() {
-    return {
-      item: { type: Object },
-    };
-  }
-
-  constructor() {
-    super();
-    this.item = {};
-  }
-
-  addToCart(e) {
-    e.preventDefault();
-    isCartOpen.set(true);
-    addCartItem(this.item);
-  }
-
-  render() {
-    return html`
-      <form @submit="${this.addToCart}">
-        <slot></slot>
-      </form>
-    `;
-  }
-}
-customElements.define('add-to-cart-form', AddToCartForm);
-```
-</Fragment>
 </UIFrameworkTabs>
 
 最后，我们将在 `CartFlyout` 组件中渲染购物车商品：
@@ -776,51 +700,7 @@ export default function CartFlyout() {
 </script>
 ```
 </Fragment>
-<Fragment slot="lit">
-```ts
-// src/components/CartFlyout.ts
-import { LitElement, html } from 'lit';
-import { isCartOpen, cartItems } from '../cartStore';
-import { StoreController } from '@nanostores/lit';
 
-export class CartFlyoutLit extends LitElement {
-  private cartOpen = new StoreController(this, isCartOpen);
-  private getCartItems = new StoreController(this, cartItems);
-
-  renderCartItem(cartItem) {
-    return html`
-      <li>
-        <img src="${cartItem.imageSrc}" alt="${cartItem.name}" />
-        <h3>${cartItem.name}</h3>
-        <p>Quantity: ${cartItem.quantity}</p>
-      </li>
-    `;
-  }
-
-  render() {
-    return this.cartOpen.value
-      ? html`
-          <aside>
-            ${
-              Object.values(this.getCartItems.value).length
-                ? html`
-                  <ul>
-                    ${Object.values(this.getCartItems.value).map((cartItem) =>
-                      this.renderCartItem(cartItem)
-                    )}
-                  </ul>
-                `
-                : html`<p>Your cart is empty!</p>`
-            }
-          </aside>
-        `
-      : null;
-  }
-}
-
-customElements.define('cart-flyout', CartFlyoutLit);
-```
-</Fragment>
 </UIFrameworkTabs>
 
 现在，你应该拥有了一个完全交互式的电商示例，并且是宇宙中最小的 JS 包 🚀

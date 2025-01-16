@@ -29,7 +29,7 @@ Astroには、`base`、`strict`、`strictest`という3つの拡張可能な`tsc
 }
 ```
 
-また、[Viteのクライアント型](https://vitejs.dev/guide/features.html#client-types)をプロジェクトで利用できるように、テンプレートには`src`フォルダ内に`env.d.ts`が含まれています。
+また、[Viteのクライアント型](https://vite.dev/guide/features.html#client-types)をプロジェクトで利用できるように、テンプレートには`src`フォルダ内に`env.d.ts`が含まれています。
 
 ```typescript title="env.d.ts"
 /// <reference types="astro/client" />
@@ -96,7 +96,7 @@ import type { SomeType } from './script';
 
 ## Importエイリアス
 
-Astroは、`tsconfig.json`と`jsconfig.json`の`paths`設定で定義する[importエイリアス](/ja/guides/aliases/)をサポートしています。詳しくは[ガイド](/ja/guides/aliases/)をご覧ください。
+Astroは、`tsconfig.json`と`jsconfig.json`の`paths`設定で定義する[importエイリアス](/ja/guides/imports/#importエイリアス)をサポートしています。
 
 
 ```astro title="src/pages/about/nate.astro" "@components" "@layouts"
@@ -258,15 +258,15 @@ const { as: Tag, ...props } = Astro.props;
 
 <p><Since v="2.1.0" /></p>
 
-Astroには、動的ルーティングに対して[`getStaticPaths()`](/ja/reference/api-reference/#getstaticpaths)関数から返される型を扱うためのヘルパーがあります。
+Astroには、動的ルーティングに対して[`getStaticPaths()`](/ja/reference/routing-reference/#getstaticpaths)関数から返される型を扱うためのヘルパーがあります。
 
-[`Astro.params`](/ja/reference/api-reference/#astroparams)の型は`InferGetStaticParamsType`で、[`Astro.props`](/ja/reference/api-reference/#astroprops)の型は`InferGetStaticPropsType`で取得できます。
+[`Astro.params`](/ja/reference/api-reference/#params)の型は`InferGetStaticParamsType`で、[`Astro.props`](/ja/reference/api-reference/#props)の型は`InferGetStaticPropsType`で取得できます。
 
 ```astro title="src/pages/posts/[...slug].astro" {2,14-15}
 ---
 import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
-export const getStaticPaths() = (async () => {
+export const getStaticPaths = (async () => {
   const posts = await getCollection('blog');
   return posts.map((post) => {
     return {

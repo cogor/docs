@@ -4,8 +4,6 @@ description: So aktualisierst du dein Projekt auf die neueste Version von Astro.
 i18nReady: true
 ---
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
-import FileTree from '~/components/FileTree.astro'
-
 
 Diese Anleitung hilft dir bei der Migration von Astro v2 zu Astro v3.
 
@@ -69,8 +67,8 @@ export default defineConfig({
 
 Diese Features sind jetzt standardmäßig verfügbar:
 
-- View Transitions für animierte Seitenübergänge und persistente Astro-Inseln. Siehe die [Breaking Changes von der View Transitions API und Upgrade-Ratschläge](/de/guides/view-transitions/#upgrade-to-v30-from-v2x), wenn du diese experimentelle Option verwendet hast.
-- Eine neue Bildservices-API `astro:assets` für das Verwenden von Bildern in Astro, einschließlich einer neuen `<Image />`-Komponente und der `getImage()`-Funktion. Bitte lies den detaillierten [Bilder Upgrade-Ratgeber](/de/guides/images/#upgrade-to-v30-from-v2x) **unabhängig davon, ob du diese experimentelle Option verwendet hast**, um zu sehen, wie sich dies auf dein Projekt auswirken könnte.
+- View Transitions für animierte Seitenübergänge und persistente Astro-Inseln.
+- Eine neue Bildservices-API `astro:assets` für das Verwenden von Bildern in Astro, einschließlich einer neuen `<Image />`-Komponente und der `getImage()`-Funktion.
 
 Lies mehr über diese zwei interessanten Features und mehr im [Astro 3.0 Blogbeitrag](https://astro.build/blog/astro-3/)!
 
@@ -128,9 +126,7 @@ Mit Astro v3.0 wurde diese Integration komplett entfernt. Die neue Lösung für 
 
 Entferne die `@astrojs/image`-Integration aus deinem Projekt. Du musst nicht nur die Integration deinstallieren, sondern auch alle Import-Anweisungen sowie die vorhandenen `<Image />`- und `<Picture />`-Komponenten aktualisieren oder entfernen. Möglicherweise musst du auch einen bevorzugten Standardbildverarbeitungsdienst konfigurieren.
 
-Du findest eine [Schritt-für-Schritt-Anleitung zum Entfernen der alten Bildintegration](/de/guides/images/#remove-astrojsimage) in unserer Bilder-Anleitung.
-
-Die Migration zu `astro:assets` bringt auch einige neue Bildoptionen und Features mit sich, die du vielleicht nutzen möchtest. Bitte sieh dir den vollständigen [Upgrade-Ratgeber für Bilder in Version 3.0](/de/guides/images/#upgrade-to-v30-from-v2x) für alle Details an!
+Die Migration zu `astro:assets` bringt auch einige neue Bildoptionen und Features mit sich, die du vielleicht nutzen möchtest.
 
 ```js del={3,7}
 // astro.config.mjs
@@ -162,7 +158,7 @@ import Markdown from '@astrojs/markdown-component';
 
 Um eine ähnliche `<Markdown />`-Komponente in deinem Code weiter zu verwenden, erwäge die Verwendung von [Community-Integrationen](https://astro.build/integrations/) wie [`astro-remote`](https://github.com/natemoo-re/astro-remote). Stelle sicher, dass du alle nötigen Änderungen an den Importen und Attributen deiner `<Markdown />`-Komponenten vornimmst, die in der Dokumentation der Integration angegeben sind.
 
-Andernfalls entferne alle Importe der Astro-`<Markdown />`-Komponente sowie die Komponenten selbst aus deinen `.astro`-Dateien. Du musst deine Inhalte dann entweder in HTML umschreiben oder [Markdown importieren](/de/guides/markdown-content/#importieren-von-markdown), indem du `.md`-Dateien verwendest.
+Andernfalls entferne alle Importe der Astro-`<Markdown />`-Komponente sowie die Komponenten selbst aus deinen `.astro`-Dateien. Du musst deine Inhalte dann entweder in HTML umschreiben oder [Markdown importieren](/de/guides/markdown-content/#importing-markdown), indem du `.md`-Dateien verwendest.
 
 ### Entfernt: Veraltete 1.x APIs
 
@@ -194,7 +190,7 @@ Astro v3.0 entfernt diesen Export vollständig.
 
 #### Was soll ich tun?
 
-Wenn du das veraltete `image()` aus `astro:content` verwendest, entferne es, da es nicht mehr existiert. Überprüfe Bilder stattdessen über [den `image`-Helfer aus `schema`](/de/guides/images/#update-content-collections-schemas):
+Wenn du das veraltete `image()` aus `astro:content` verwendest, entferne es, da es nicht mehr existiert. Überprüfe Bilder stattdessen über den `image`-Helfer aus `schema`:
 
  ```ts title="src/content/config.ts" del={1} ins={2} "({ image })"
 import { defineCollection, z, image } from "astro:content";
@@ -366,7 +362,7 @@ Astro v3.0 deklariert dieses Feature als veraltet und bevorzugt die Verwendung v
 
 #### Was soll ich tun?
 
-Um weiterhin einige Seiten in deinem Projekt als Entwürfe zu kennzeichnen, [verwende stattdessen Inhalts-Sammlungen](/de/guides/content-collections/#migrating-from-file-based-routing) und [filtere Seiten manuell aus](/de/guides/content-collections/#filtering-collection-queries), indem du die `draft: true`-Frontmatter-Eigenschaft verwendest.
+Um weiterhin einige Seiten in deinem Projekt als Entwürfe zu kennzeichnen, [verwende stattdessen Inhalts-Sammlungen](/de/guides/content-collections/) und [filtere Seiten manuell aus](/de/guides/content-collections/#filtering-collection-queries), indem du die `draft: true`-Frontmatter-Eigenschaft verwendest.
 
 ### Veraltet: Rückgabe eines einfachen Objekts an Endpunkten
 
@@ -628,7 +624,7 @@ Astro v3.0 entfernt die CLI aus dem Eintrittspunkt und exportiert einen neuen Sa
 
 #### Was soll ich tun?
 
-Um die Astro Kommandozeilenschnittstelle [programmatisch auszuführen](/de/reference/cli-reference/#advanced-apis-experimental), verwende die neuen experimentellen JavaScript-APIs:
+Um die Astro Kommandozeilenschnittstelle [programmatisch auszuführen](/de/reference/programmatic-reference/), verwende die neuen experimentellen JavaScript-APIs:
 
 
 ```js

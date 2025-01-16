@@ -1,13 +1,15 @@
 ---
 title: Xata & Astro
 description: Add a serverless database with full-text search to your project with Xata
+sidebar:
+  label: Xata
 type: backend
 service: Xata
 stub: false
 i18nReady: true
 ---
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
-import FileTree from '~/components/FileTree.astro'
+import { FileTree } from '@astrojs/starlight/components';
 
 
 [Xata](https://xata.io) is a **Serverless Data Platform** that combines the features of a relational database, a search engine, and an analytics engine by exposing a single consistent REST API.
@@ -60,7 +62,7 @@ interface ImportMeta {
 Read more about [environment variables](/en/guides/environment-variables/) and `.env` files in Astro.
 :::
 
-Using the codegeneration from the Xata CLI and choosing the TypeScript option, generated an instance of the SDK for you, with types tailored to your database schema. Additionally, `@xata.io/client` was added to your `package.json`.
+Using the code generation from the Xata CLI and choosing the TypeScript option, generated an instance of the SDK for you, with types tailored to your database schema. Additionally, `@xata.io/client` was added to your `package.json`.
 
 Your Xata environment variables and database url were automatically pulled by the SDK instance, so there's no more setup work needed.
 
