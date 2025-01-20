@@ -4,15 +4,17 @@ description: Apprendre à appeler des points de terminaison à partir du serveur
 i18nReady: true
 type: recipe
 ---
+import { Steps } from '@astrojs/starlight/components';
 
 Les points de terminaison peuvent être utilisés pour servir de nombreux types de données. Cette recette appelle un point de terminaison du serveur à partir du script de composant d'une page pour afficher un message d'accueil, sans nécessiter de demande de récupération supplémentaire.
 
 ## Prérequis
 
-- Un projet avec [SSR](/fr/guides/server-side-rendering/) (output : 'server') activé
+- Un projet avec [SSR](/fr/guides/on-demand-rendering/) (output : 'server') activé
 
 ## Recette
 
+<Steps>
 1. Créer un endpoint dans un nouveau fichier `src/pages/api/hello.ts` qui retourne des données :
 
     ```ts title="src/pages/api/hello.ts"
@@ -27,7 +29,7 @@ Les points de terminaison peuvent être utilisés pour servir de nombreux types 
     }
     ```
 
-2. Sur n'importe quelle page Astro, importez la méthode `GET()` du point de terminaison. Appelez-la avec le [`Astro` global](/fr/reference/api-reference/#astro-global) pour fournir le contexte de la requête, et utilisez la réponse sur la page :
+2. Sur n'importe quelle page Astro, importez la méthode `GET()` du point de terminaison. Appelez-la avec le [`Astro` global](/fr/reference/api-reference/) pour fournir le contexte de la requête, et utilisez la réponse sur la page :
 
     ```astro title="src/pages/index.astro"
     ---
@@ -39,3 +41,4 @@ Les points de terminaison peuvent être utilisés pour servir de nombreux types 
 
     <h1>{data.greeting} world!</h1>
     ```
+</Steps>

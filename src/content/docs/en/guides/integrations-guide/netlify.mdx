@@ -2,15 +2,17 @@
 type: integration
 title: '@astrojs/netlify'
 description: Learn how to use the @astrojs/netlify SSR adapter to deploy your Astro project.
+sidebar:
+  label: Netlify
 githubIntegrationURL: 'https://github.com/withastro/adapters/tree/main/packages/netlify/'
 category: adapter
 i18nReady: true
 ---
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
 
-This adapter allows Astro to deploy your [`hybrid` or `server` rendered site](/en/basics/rendering-modes/#on-demand-rendered) to [Netlify](https://www.netlify.com/).
+This adapter allows Astro to deploy your [on-demand rendered routes](/en/guides/on-demand-rendering/) to [Netlify](https://www.netlify.com/).
 
-If you're using Astro as a [static site builder](/en/basics/rendering-modes/#pre-rendered), you don't need an adapter.
+If you're using Astro as a static site builder, you don't need an adapter.
 
 Learn how to deploy your Astro site in our [Netlify deployment guide](/en/guides/deploy/netlify/).
 
@@ -65,7 +67,7 @@ First, install the Netlify adapter to your project’s dependencies using your p
   </Fragment>
 </PackageManagerTabs>
 
-Then, add the adapter and your desired [on-demand rendering mode](/en/basics/rendering-modes/#on-demand-rendered) to your `astro.config.*` file:
+Then, add the adapter and your desired [on-demand rendering mode](/en/guides/on-demand-rendering/) to your `astro.config.*` file:
 
    ```js title="astro.config.mjs" ins={2, 6-7}
     import { defineConfig } from 'astro/config';
@@ -111,9 +113,6 @@ const {
 If you're using TypeScript, you can get proper typings by updating `src/env.d.ts` to use `NetlifyLocals`:
 
 ```ts title="src/env.d.ts"
-/// <reference path="../.astro/types.d.ts" />
-/// <reference types="astro/client" />
-
 type NetlifyLocals = import('@astrojs/netlify').NetlifyLocals
 
 declare namespace App {
@@ -133,7 +132,7 @@ To implement redirects, access control or custom response headers for pre-render
 
 ```js title="astro.config.mjs" ins={8}
 import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify/functions';
+import netlify from '@astrojs/netlify';
 
 export default defineConfig({
   // ...
@@ -157,7 +156,7 @@ To opt out of Netlify's Image CDN remote image optimization, use the `imageCDN` 
 
 ```js title="astro.config.mjs" ins={8}
 import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify/functions';
+import netlify from '@astrojs/netlify';
 
 export default defineConfig({
   // ...
@@ -168,17 +167,34 @@ export default defineConfig({
 });
 ```
 
-:::caution
-This adapter does not support the `image.domains` and `image.remotePatterns` config properties in your Astro config. To [specify remote paths for Netlify Image CDN](https://docs.netlify.com/image-cdn/overview/#remote-path), use the `remote_images` field in `netlify.toml`.
-:::
+If you are using images hosted on another domain, you must authorize the domain or URL patterns using the [`image.domains`](/en/reference/configuration-reference/#imagedomains) or [`image.remotePatterns`](/en/reference/configuration-reference/#imageremotepatterns) configuration options:
 
-### Static sites & Redirects
+```js title="astro.config.mjs" ins={8-10}
+import { defineConfig } from 'astro/config';
+import netlify from '@astrojs/netlify';
 
-For static sites you usually don't need an adapter. However, if you use `redirects` configuration in your Astro config, the Netlify adapter can be used to translate this to the proper `_redirects` format.
+export default defineConfig({
+    // ...
+    output: 'server',
+    adapter: netlify(),
+    image: {
+      domains: ['example.com'],
+    },
+});
+```
+For more information, see [the guide to authorizing remote images](/en/guides/images/#authorizing-remote-images). This is not required for images hosted on the same domain as your site.
+
+### Static sites with the Netlify Adapter
+
+For static sites (`output: 'static'`) hosted on Netlify, you usually don't need an adapter. However, some deployment features are only available through an adapter.
+
+Static sites will need to install this adapter to use and configure Netlify's [image service](#netlify-image-cdn-support).
+
+If you use `redirects` configuration in your Astro config, the Netlify adapter can be used to translate this to the proper `_redirects` format.
 
 ```js title="astro.config.mjs"
 import { defineConfig } from 'astro/config';
-import netlify from '@astrojs/netlify/static';
+import netlify from '@astrojs/netlify';
 
 export default defineConfig({
   // ...

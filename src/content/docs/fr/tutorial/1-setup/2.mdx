@@ -6,14 +6,13 @@ description: |-
   Créez un nouveau projet pour le tutoriel Astro et préparez-vous à coder
 i18nReady: true
 ---
-import Badge from '~/components/Badge.astro';
 import Checklist from '~/components/Checklist.astro';
 import Box from '~/components/tutorial/Box.astro';
 import InstallGuideTabGroup from '~/components/TabGroup/InstallGuideTabGroup.astro';
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro';
 import PreCheck from '~/components/tutorial/PreCheck.astro';
-
-
+import { Steps } from '@astrojs/starlight/components';
+import Badge from "~/components/Badge.astro"
 
 <PreCheck>
   - Exécutez l'assistant de configuration `create astro` pour créer un nouveau projet Astro
@@ -25,61 +24,62 @@ import PreCheck from '~/components/tutorial/PreCheck.astro';
 
 La méthode préférée pour créer un nouveau site Astro est d'utiliser notre assistant de configuration `create astro`.
 
+<Steps>
 1. Dans la ligne de commande de votre terminal, exécutez la commande suivante en utilisant votre gestionnaire de paquets préféré :
 
     <PackageManagerTabs>
       <Fragment slot="npm">
       ```shell
       # créez un nouveau projet avec npm
-      npm create astro@latest
+      npm create astro@latest -- --template minimal
       ```
       </Fragment>
       <Fragment slot="pnpm">
       ```shell
       # créez un nouveau projet avec pnpm
-      pnpm create astro@latest
+      pnpm create astro@latest --template minimal
       ```
       </Fragment>
       <Fragment slot="yarn">
       ```shell
       # créez un nouveau projet avec yarn
-      yarn create astro
+      yarn create astro --template minimal
       ```
       </Fragment>
     </PackageManagerTabs>
 
 2. Confirmez avec `y` pour installer `create-astro`.
-3. À la question, "Where would you like to create your new project?" ("Où souhaitez-vous créer votre nouveau projet ?") saisissez le nom d'un dossier pour créer un nouveau répertoire pour votre projet, par exemple `./tutorial`.
+3. Lorsque l'invite vous demande où créer le projet, saisissez le nom d'un dossier pour créer un nouveau répertoire pour votre projet, par exemple :
+`./tutorial`
 
     :::note
     Un nouveau projet Astro ne peut être créé que dans un dossier complètement vide, alors choisissez un nom pour votre dossier qui n'existe pas encore !
     :::
 
-4. Vous verrez une courte liste de modèles de départ que vous pourrez choisir. Utilisez les touches fléchées (haut et bas) pour naviguer jusqu'au modèle “Empty” (Vide), puis appuyez sur la touche Entrée pour valider votre choix.
+4. Lorsque l'invite vous demande si vous souhaitez ou non installer des dépendances, saisissez ou sélectionnez `y`.
 
-5. À la question, "Would you like to install dependencies?" ("Souhaitez-vous installer des dépendances ?") tapez`y`.
-
-6. Lorsque l'invite vous demande si vous prévoyez d'utiliser TypeScript, tapez `n`.
-
-7. Lorsque l'invite demande, "Would you like to initialize a new git repository?" ("Souhaitez-vous initialiser un nouveau dépôt git ?",) tapez `y`.
+5. Lorsque l'invite vous demande si vous souhaitez ou non initialiser un nouveau référentiel git, saisissez ou sélectionnez `y`.
+</Steps>
 
 Une fois l'assistant d'installation terminé, vous n'avez plus besoin de ce terminal. Vous pouvez maintenant ouvrir VS Code pour continuer.
 
 ## Ouvrez votre projet dans VS Code
 
-1. Ouvrez VS Code. Vous serez invité à ouvrir un dossier. Choisissez le dossier que vous avez créé lors de l'assistant de configuration.
+<Steps>
+6. Ouvrez VS Code. Vous serez invité à ouvrir un dossier. Choisissez le dossier que vous avez créé lors de l'assistant de configuration.
 
-2. Si c'est la première fois que vous ouvrez un projet Astro, vous devriez voir une notification vous demandant si vous souhaitez installer des extensions recommandées. Cliquez pour voir les extensions recommandées, et choisissez l'extension [Astro language support extension](https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode). Cela fournira une coloration syntaxique et des complétions automatiques pour votre code Astro.
+7. Si c'est la première fois que vous ouvrez un projet Astro, vous devriez voir une notification vous demandant si vous souhaitez installer des extensions recommandées. Cliquez pour voir les extensions recommandées, et choisissez l'extension [Astro language support](https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode). Cela fournira une coloration syntaxique et des complétions automatiques pour votre code Astro.
 
-3. Assurez-vous que le terminal est visible et que vous pouvez voir l'invite de commande, comme ceci :
+8. Assurez-vous que le terminal est visible et que vous pouvez voir l'invite de commande, comme ceci :
 
     ```sh
-    utilisateur@machine:~/tutorial$
+    utilisateur@machine:~/tutoriel$
     ```
 
     :::tip[Raccourci Clavier]
     Pour modifier la visibilité du terminal, utilisez <kbd>Ctrl + J</kbd> (macOS : <kbd>Cmd ⌘ + J</kbd>).
     :::
+</Steps>
 
 Vous pouvez maintenant utiliser le terminal intégré à cette fenêtre, plutôt que l'application Terminal de votre ordinateur, pour le reste de ce tutoriel.
 
@@ -91,7 +91,8 @@ Pour prévisualiser vos fichiers de projet _comme un site web_ pendant que vous 
 
 ### Démarrez le serveur de dev
 
-1. Exécutez la commande pour démarrer le serveur dev d'Astro en tapant dans le terminal de VS Code :
+<Steps>
+9. Exécutez la commande pour démarrer le serveur dev d'Astro en tapant dans le terminal de VS Code :
 
     <PackageManagerTabs>
       <Fragment slot="npm">
@@ -112,18 +113,22 @@ Pour prévisualiser vos fichiers de projet _comme un site web_ pendant que vous 
     </PackageManagerTabs>
 
     Vous devriez maintenant voir une confirmation dans le terminal indiquant qu'Astro fonctionne en mode dev. 🚀
+</Steps>
 
 ## Visualisez un aperçu de votre site web
 
 Vos fichiers de projet contiennent tout le code nécessaire pour afficher un site web Astro, mais c'est le navigateur qui est responsable de l'affichage de votre code sous forme de pages web.
 
-1. Cliquez sur le lien `localhost` dans la fenêtre du terminal pour voir un aperçu en direct de votre nouveau site web Astro !
+<Steps>
+10. Cliquez sur le lien `localhost` dans la fenêtre du terminal pour voir un aperçu en direct de votre nouveau site web Astro !
 
     (Astro utilise `http://localhost:4321` par défaut si le port `4321` est disponible.)
 
     Voici à quoi devrait ressembler le site web de départ "Empty Project" d'Astro dans l'aperçu du navigateur :
 
     ![Une page blanche avec le mot Astro en haut.](/tutorial/minimal.png)
+  
+</Steps>
 
 :::tip[Utilisation du serveur de développement Astro]
 
@@ -145,4 +150,4 @@ Parfois, le serveur dev s'arrêtera de lui-même pendant que vous travaillez. Si
 
 ### Ressources
 
-- <p>[Démarrer avec Visual Studio Code](https://code.visualstudio.com/docs/introvideos/basics) <Badge>externe</Badge> — un tutoriel vidéo pour l'installation, la configuration et le travail avec VS Code</p>
+- <p>[Démarrer avec Visual Studio Code](https://code.visualstudio.com/docs/introvideos/basics) <Badge class="neutral-badge" text="externe" /> — un tutoriel vidéo pour l'installation, la configuration et le travail avec VS Code</p>

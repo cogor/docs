@@ -4,15 +4,17 @@ description: Learn how to call endpoints from the server in Astro.
 i18nReady: true
 type: recipe
 ---
+import { Steps } from '@astrojs/starlight/components';
 
 Endpoints can be used to serve many kinds of data. This recipe calls a server endpoint from a page's component script to display a greeting, without requiring an additional fetch request.
 
 ## Prerequisites
 
-- A project with [SSR](/en/guides/server-side-rendering/) (output: 'server') enabled
+- A project with [SSR](/en/guides/on-demand-rendering/) (output: 'server') enabled
 
 ## Recipe
 
+<Steps>
 1. Create an endpoint in a new file `src/pages/api/hello.ts` that returns some data:
 
     ```ts title="src/pages/api/hello.ts"
@@ -27,7 +29,7 @@ Endpoints can be used to serve many kinds of data. This recipe calls a server en
     }
     ```
 
-2. On any Astro page, import the `GET()` method from the endpoint. Call it with the [`Astro` global](/en/reference/api-reference/#astro-global) to provide the request context, and use the response on the page:
+2. On any Astro page, import the `GET()` method from the endpoint. Call it with the [`Astro` global](/en/reference/api-reference/) to provide the request context, and use the response on the page:
 
     ```astro title="src/pages/index.astro"
     ---
@@ -39,3 +41,4 @@ Endpoints can be used to serve many kinds of data. This recipe calls a server en
 
     <h1>{data.greeting} world!</h1>
     ```
+</Steps>

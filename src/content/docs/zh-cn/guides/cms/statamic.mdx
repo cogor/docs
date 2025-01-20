@@ -1,6 +1,8 @@
 ---
 title: 无头模式的 Statamic 与 Astro
 description: 将 Statamic 作为 CMS 并为你的 Astro 项目添加内容
+sidebar:
+  label: Statamic
 type: cms
 stub: false
 service: Statamic
@@ -20,7 +22,7 @@ Statamic 提供了内置的 [REST API](https://statamic.dev/rest-api) 和 [Graph
 首先，你需要具备以下条件：
 
 1. REST API 和 GraphQL API 仅在 Statamic 的专业版中可用。你可以在 [本地机器](https://statamic.dev/tips/how-to-enable-statamic-pro#trial-mode) 上免费试用专业版。
-2. **Astro 项目** - 如果你还需要一个 Astro 项目，我们的 [安装指南](/zh-cn/install/auto/) 将帮助你快速启动。
+2. **Astro 项目** - 如果你还需要一个 Astro 项目，我们的 [安装指南](/zh-cn/install-and-setup/) 将帮助你快速启动。
 3. **Statamic 站点** - 如果你需要一个 Statamic 网站，[这个指南](https://statamic.dev/quick-start-guide) 将帮助你入门。记得在 `.env` 文件中添加 `STATAMIC_API_ENABLED=true` 或 `STATAMIC_GRAPHQL_ENABLED=true` 来启用 REST API 或 GraphQL API，并在 API 配置文件中启用所需资源。
 
 :::caution
@@ -62,28 +64,43 @@ const posts = await res.json()
 
 ```astro title="src/pages/index.astro
 ---
-const res = await fetch("https://[YOUR-SITE]/graphql/",
-  {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      query: `
-        posts: entries(collection: "posts", sort: "date desc") {
-          data {
-            title
-            ... on Entry_Posts_Post {
+const graphqlQuery = {
+  query: `
+    query Entries($page: Int, $locale: String) {
+      entries(
+        collection: "posts"
+        sort: "date asc"
+        limit: 20
+        page: $page
+        filter: { locale: $locale }
+      ) {
+        current_page
+        has_more_pages
+        data {
+          title
+          ... on Entry_Posts_Post {
               content
             }
-          }
         }
-      `
-    }),
-  });
-const entries = await res.json()
+      }
+    }
+  `,
+  variables: {
+    page: page,
+    locale: locale,
+  },
+};
+const res = await fetch("https://[YOUR-SITE]/graphql", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(graphqlQuery),
+})
+const { data } = await res.json();
+const entries = data?.entries;
 ---
 <h1>Astro + Statamic 🚀</h1>
 {
-  entries.data.posts.data.map((post) => (
+  entries.data.map((post) => (
       <h2 set:html={post.title} />
       <p set:html={post.content} />
   ))

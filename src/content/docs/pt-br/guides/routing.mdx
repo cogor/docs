@@ -3,7 +3,7 @@ title: Roteamento
 description: Uma introdução a roteamento com Astro.
 i18nReady: true
 ---
-import FileTree from '~/components/FileTree.astro'
+import { FileTree } from '@astrojs/starlight/components';
 import RecipeLinks from "~/components/RecipeLinks.astro"
 import Since from '~/components/Since.astro'
 
@@ -170,7 +170,7 @@ const { titulo, texto } = Astro.props;
 ```
 
 ### Modo Servidor (SSR)
-No [modo SSR](/pt-br/guides/server-side-rendering/), rotas dinâmicas são definidas da mesma forma: inclua colchetes `[param]` ou `[...path]` no nome de seus arquivos para corresponder a strings ou caminhos arbitrários. Porém, já que as rotas não são mais construídas com antecedência, a página será servida para qualquer rota correspondente. Já que essas não são rotas "estáticas", `getStaticPaths` não deve ser utilizado.
+No [modo SSR](/pt-br/guides/on-demand-rendering/), rotas dinâmicas são definidas da mesma forma: inclua colchetes `[param]` ou `[...path]` no nome de seus arquivos para corresponder a strings ou caminhos arbitrários. Porém, já que as rotas não são mais construídas com antecedência, a página será servida para qualquer rota correspondente. Já que essas não são rotas "estáticas", `getStaticPaths` não deve ser utilizado.
 
 ```astro title="src/pages/recursos/[recurso]/[id].astro"
 ---

@@ -1,117 +1,66 @@
 ---
-title: دليل البداية
-description: مقدمة بسيطة عن أسترو.
+title: ابدء
+description: مقدمة أساسية إلى أسترو.
+i18nReady: true
+tableOfContents: false
+editUrl: false
+next: false
+hero:
+  title: مستندات أسترو
+  tagline: المرشدين والموارد ومراجع API لمساعدتك في البناء مع أسترو.
+  actions:
+    - text: ثبت أسترو
+      icon: rocket
+      link: /ar/install-and-setup/
+    - text: تعرف على ميزات أسترو
+      icon: right-arrow
+      variant: minimal
+      link: /ar/concepts/why-astro/
+  facepile:
+    tagline: مدعوم من أسترو ومساهمي البرامج المفتوحة المصدر.
+    linkText: انضم إلينا!
+    link: /ar/contribute/
+banner:
+  content: هل تريد تجربة النسخة الأولية من الإصدار 5 ؟ اقرأ <a href="https://5-0-0-beta.docs.astro.build/ar/guides/upgrade-to/v5/">الإصدار 5. دليل الترقية</a>!
 ---
-import Button from '~/components/Button.astro'
-import TranslatorList from '~/components/TranslatorList.astro'
-import ContributorList from '~/components/ContributorList.astro'
-import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
 
+import { CardGrid } from '@astrojs/starlight/components'
+import Card from '~/components/Landing/Card.astro'
+import ListCard from '~/components/Landing/ListCard.astro'
+import SplitCard from '~/components/Landing/SplitCard.astro'
+import Discord from '~/components/Landing/Discord.astro'
 
-:::tip[نسخة أسترو 3.0 هنا!]
-**ما الجديد في نسخة أسترو 3.0?** [
-اقرأ المدونة الخاصة بالإعلان
-](https://astro.build/blog/astro-3/).  
-**مستعد للترقية؟** [تابع دليلنا للترقية](/ar/guides/upgrade-to/v3/).
-:::
+<CardGrid>
+  <Card title="ماذا ستبني مع أسترو؟" icon="laptop">
+    استكشف [Astro starter themes](https://astro.build/themes/) للمدونات ، المحافظ ، المستندات ، الصفحات المقصودة ، SaaS ، التسويق ، مواقع التجارة الإلكترونية ، والمزيد!
+  </Card>
 
-<h2>ما هو أسترو؟</h2>
+  <Card title="قم بجولة إرشاد" icon="star">
+    أكمل برنامجنا التمهيدي [دروس لبناء مدونة](/ar/tutorial/0-introduction/) لتعلم الأساسيات وإنشاء موقعك الأول باستخدام أسترو.
+  </Card>
 
-أسترو هو إطار عمل ويب **شامل** لبناء مواقع ويب **سريعة** تركز على **المحتوى**.
+  <SplitCard title="ابدأ مشروعًا جديدًا" icon="rocket">
+    ```sh
+    # create a new project with npm
+    npm create astro@latest
+    ```
+    
+    [دليلنا للتثبيت](/ar/install-and-setup/) لديه إرشادات خطوة بخطوة لتثبيت أسترو باستخدام معالج CLI الخاص بنا ، وإنشاء مشروع جديد من مستودع Astro Github موجود ، ولتثبيت أسترو يدويًا.
+  </SplitCard>
 
-## أهم المميزات
+  <ListCard title="تعلم" icon="open-book">
+    - [ميزات أسترو الرئيسية](/ar/concepts/why-astro/)
+    - [معمارية جزر أسترو](/ar/concepts/islands/)
+    - [مكونات أسترو](/ar/basics/astro-components/)
+    - [بناء جملة قالب أسترو](/ar/reference/astro-syntax/)
+  </ListCard>
 
-- **Component Islands (جُزر المكونات)**: معمارية ويب جديدة لبناء مواقع سريعة كالبرق.
-- **Server-first API (مبدأ على الخادم أولًا)**: نقلنا التروية المكلفة عن أجهزة المستخدم.
-- **صفر-جافاسكربت بشكل افتراضي**: لا يوجد حِمل جافاسكربت إضافي وقت الشتغيل لإبطائك.
-- **Edge-ready**: انشر في أي مكان، حتى في بيئات تشغيل حواف عالمية مثل Deno أو Cloudflare.
-- **قابل للتخصيص**: Tailwind, MDX, وأكثر من 100+ إضافة أخرى لتختار منها.
-- **محايد لأطر عمل الواجهات البرمجية**: قابل للاستخدام مع أي إطار واجهة مستخدم مثل: React و Preact و Svelte و Vue و Solid و Lit وأكثر.
+  <ListCard title="امتداد" icon="puzzle">
+    - [أضف تكاملًا مثل React و Tailwind](/ar/guides/integrations-guide/)
+    - [قم بإنشاء مجموعات محتوى آمنة النوع](/ar/guides/content-collections/)
+    - [تعزيز التنقل مع إنتقالات المشهد](/ar/guides/view-transitions/)
+    - [قم بربط نظام إدارة محتوى إلى مشروعك](/ar/guides/cms/)
+  </ListCard>
+</CardGrid>
 
-ألقِ نظرة على تحليلنا التفصيلي [لماذا أسترو](/ar/concepts/why-astro/) لمعرفة المزيد عن ما يجعل أسترو مميزًا. ✨
-
-## جرب أسترو على متصفحك
-
-قم بزيارة [astro.new](https://astro.new/) واختر من بين مجموعة متنوعة من القوالب للبدء. يمكنك تجربة نسخة كاملة من أسترو مباشرة في متصفحك!
-
-<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-    <Button href="https://astro.new/basics?on=stackblitz">جرب قالب بسيط</Button>
-    <Button variant="outline" href="https://astro.new/">تفقد جميع القوالب ←</Button>
-</div>
-
-## ابدأ مشروعك الاول مع أسترو
-
-<PackageManagerTabs>
-  <Fragment slot="npm">
-  ```shell
-  # create a new project with npm
-  npm create astro@latest
-  ```
-  </Fragment>
-  <Fragment slot="pnpm">
-  ```shell
-  # create a new project with pnpm
-  pnpm create astro@latest
-  ```
-  </Fragment>
-  <Fragment slot="yarn">
-  ```shell
-  # create a new project with yarn
-  yarn create astro
-  ```
-  </Fragment>
-</PackageManagerTabs>
-
-يحتوي [دليل التثبيت](/ar/install/auto/) الخاص بنا على إرشادات كاملة خطوة بخطوة لتثبيت أسترو باستخدام CLI الخاص بنا، وإنشاء مشروع جديد من مستودع GitHub، ولتثبيت أسترو يدويًا.
-
-## تعلم أسترو
-
-أمثلة لبعض المفاهيم الأساسية والأنماط المتعلقة بأسترو!
-
-📚 [انشئ أول صفحة](/ar/basics/astro-pages/) في موقعك.
-
-📚 اقرأ أكثر عن [هياكل مشاريع](/ar/basics/project-structure/) أسترو.
-
-📚 تعلم أكثر عن [التوجيه القائم على الملفات](/ar/guides/routing/) في أسترو.
-
-*... تفقد التوثيق الكامل للـ API عبر خانة  **مراجع** أعلى الصفحة.*
-
-## ابحر مع أسترو
-
-🧰 ابدأ مشروعك القادم باستخدام إحدى [القوالب المبنية مسبقًا](https://astro.build/themes/).
-
-🧰 
-خصص موقعك، عبر عشرات الإضافات التي يوفرها أسترو ومجتمعه، [تصفح الإضافات](https://astro.build/integrations/).
-
-🧰 احصل على الإلهام من خلال زيارة [معرض مواقعنا](https://astro.build/showcase/).
-
-*... تفقد [دليل التعامل مع الإضافات](/ar/guides/integrations-guide/)*.
-
-## انضم إلى مجتمعنا
-
-انضم إلى مجتمع [أسترو على ديسكورد](https://astro.build/chat) للمشاركة والحصول على المساعدة من مجتمع نشط وودود!
-
-💬 رحّب وعرف بنفسك على قناة `#general`!
-
-💬 اطرح أسئلتك على فريق المساعدة في قناة `#support`!
-
-💬 شاركنا ما تعمل عليه على قناة `#showcase`!
-
-## ما الجديد؟
-
-[مدونة أسترو](https://astro.build/blog/)
-
-[سجل تغييرات أسترو](https://github.com/withastro/astro/blob/main/packages/astro/CHANGELOG.md)
-
-<TranslatorList githubRepo="withastro/docs">
-
-## الترجمة
-
-تراجم هذه المستندات مقدمة إليكم بسبب هؤلاء الأشخاص الرائعين. [ساعدنا!](https://contribute.docs.astro.build/guides/i18n/)
-</TranslatorList>
-
-## ساهم
-
-أنت تُطالع هذا التوثيق بفضل كل هؤلاء المساهمين، [انضم إلينا على GitHub!](https://github.com/withastro/docs)
-
-<ContributorList githubRepo="withastro/docs" />
+<Discord title="هل لديك سؤال أو تريد المشاركة؟" cta="انضم إلينا على Discord"/>

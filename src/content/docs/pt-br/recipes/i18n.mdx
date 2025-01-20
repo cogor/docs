@@ -4,20 +4,27 @@ description: Use roteamento dinâmico e coleções de conteúdo para adicionar s
 type: recipe
 i18nReady: true
 ---
-import FileTree from '~/components/FileTree.astro'
+import { FileTree } from '@astrojs/starlight/components';
+import ReadMore from '~/components/ReadMore.astro';
+import { Steps } from '@astrojs/starlight/components';
 import StaticSsrTabs from '~/components/tabs/StaticSsrTabs.astro'
 
-Astro não tem suporte integrado a internacionalização (i18n), mas você pode construir a sua própria solução.
-Nesta receita, você vai aprender como usar as coleções de conteúdo e roteamento dinâmico para fornecer conteúdo em diferentes línguas.
+Nesta receita, você aprenderá como usar coleções de conteúdo e roteamento dinâmico para construir suas própria solução de internacionalização (i18n) e servir seu conteúdo em diferentes línguas.
 
-Esse exemplo utiliza cada língua como seu próprio subcaminho, e.x. `example.com/en/blog` para Inglês e `example.com/fr/blog` para Francês.
+:::tip
+Na v4.0, Astro adicionou suporte embutido para roteamento i18n que permite qeu você configure línguas padrão e suportadas, e inclui funcões auxiliares valiosas para ajudá-lo em distribuir para uma audiência internacional. Se você quiser usar isto, veja nosso [guia de internacionalização](/pt-br/guides/internationalization/) para aprender sobre essas funcionalidades.
+:::
+Esse exemplo serve cada língua em seu próprio subcaminho, como `example.com/en/blog` para inglês e `example.com/fr/blog` para francês.
 
-Se você prefere que a língua padrão não seja visível na URL ao contrário de outras línguas, abaixo tem [instruções para ocultar a língua padrão](/pt-br/recipes/i18n/#ocultar-a-língua-padrão-na-url).
+Se você prefere que a língua padrão não seja visível na URL ao contrário de outras línguas, aqui estão [instruções para ocultar a língua padrão](/pt-br/recipes/i18n/#ocultar-a-língua-padrão-na-url).
+
+<ReadMore>Veja a [seção de recursos](#recursos) para links externos sobre assuntos relacionados como estilização _right-to-left_ (RTL) e escolher tags de idioma.</ReadMore>
 
 ## Receita
 
 ### Configure páginas para cada língua
 
+<Steps>
 1. Crie um diretório para cada língua que você quer oferecer suporte. Por exemplo, `en/` e `fr/` se você estiver oferecendo suporte para inglês e francês:
 
     <FileTree>
@@ -31,7 +38,6 @@ Se você prefere que a língua padrão não seja visível na URL ao contrário d
           - index.astro
         - index.astro
     </FileTree>
-
     
 2. Configure `src/pages/index.astro` para redirecionar para a língua padrão.
 
@@ -58,9 +64,11 @@ Se você prefere que a língua padrão não seja visível na URL ao contrário d
         ```
       </Fragment>
     </StaticSsrTabs>
+</Steps>
 
 ### Use coleções para conteúdo traduzido
 
+<Steps>
 1. Crie um diretório em `src/content/` para cada tipo de conteúdo que você quer incluir e adicione subdiretórios para cada língua suportada. Por exemplo, para oferecer suporte a postagens de blog em inglês e francês:
 
     <FileTree>
@@ -83,9 +91,9 @@ Se você prefere que a língua padrão não seja visível na URL ao contrário d
 
     const blogCollection = defineCollection({
       schema: z.object({
-        title: z.string(),
-        author: z.string(),
-        date: z.date()
+        titulo: z.string(),
+        autor: z.string(),
+        dia: z.date()
       })
     });
 
@@ -94,13 +102,15 @@ Se você prefere que a língua padrão não seja visível na URL ao contrário d
     };
 
     ```
-    📚 Leia mais sobre [Coleções de Conteúdo](/pt-br/guides/content-collections/).
+
+    <ReadMore>Leia mais sobre [Coleções de Conteúdo](/pt-br/guides/content-collections/).</ReadMore>
 
 3. Use [rotas dinâmicas](/pt-br/guides/routing/#rotas-dinâmicas) para buscar e renderizar conteúdo baseado em parâmetros `lang` e `slug`.
 
     <StaticSsrTabs>
       <Fragment slot="static">
         Em modo de renderização estático, use `getStaticPaths` para mapear cada entrada de conteúdo para uma página:
+
         ```astro
         //src/pages/[lang]/blog/[...slug].astro
         ---
@@ -119,18 +129,18 @@ Se você prefere que a língua padrão não seja visível na URL ao contrário d
 
         const { lang, slug } = Astro.params;
         const pagina = Astro.props;
-        const dataFormatada = pagina.data.data.toLocaleString(lang);
+        const dataFormatada = pagina.data.dia.toLocaleString(lang);
 
         const { Content } = await page.render();
         ---
-        <h1>{page.data.titulo}</h1>
-        <p>by {page.data.autor} • {dataFormatada}</p>
+        <h1>{pagina.data.titulo}</h1>
+        <p>por {pagina.data.autor} • {dataFormatada}</p>
         <Content/>
         ```
       </Fragment>
 
       <Fragment slot="ssr">
-        Em [modo SSR](/pt-br/guides/server-side-rendering/), busque a entrada solicitada diretamente:
+        Em [modo SSR](/pt-br/guides/on-demand-rendering/), busque a entrada solicitada diretamente:
 
         ```astro
         //src/pages/[lang]/blog/[...slug].astro
@@ -138,32 +148,35 @@ Se você prefere que a língua padrão não seja visível na URL ao contrário d
         import { getEntryBySlug } from 'astro:content';
 
         const { lang, slug } = Astro.params;
-        const pagina = await getEntryBySlug('blog', `${lang}/${slug}`);
+        const pagina = await getEntry('blog', `${lang}/${slug}`);
 
         if (!pagina) {
           return Astro.redirect('/404');
         }
 
-        const dataFormatada = page.data.data.toLocaleString(lang);
+        const dataFormatada = pagina.data.dia.toLocaleString(lang);
         const { Content, headings } = await page.render();
         ---
-        <h1>{page.data.titulo}</h1>
-        <p>by {page.data.autor} • {dataFormatada}</p>
+        <h1>{pagina.data.titulo}</h1>
+        <p>por {pagina.data.autor} • {dataFormatada}</p>
         <Content/>
         ```
       </Fragment>
     </StaticSsrTabs>
 
-    📚 Leia mais sobre [roteamento dinâmico](/pt-br/guides/routing/#rotas-dinâmicas).
+    <ReadMore>Leia mais sobre [roteamento dinâmico](/pt-br/guides/routing/#rotas-dinâmicas).</ReadMore>
 
     :::tip[Formatação de data]
-    O exemplo acima utiliza o método de formatação de data [`toLocaleString()`](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) para criar uma string legível a partir da data da página.
+    O exemplo acima utiliza o [método de formatação de data `toLocaleString()`](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) embutido para criar uma string legível por humanos a partir da data do frontmatter.
     Isso garante que a data e a hora sejam formatadas de acordo com a língua do usuário.
     :::
+</Steps>
 
 ### Traduza strings da UI
 
 Criar dicionários de termos para traduzir as labels dos elementos de UI em todo o seu site. Isso permite que seus visitantes experimentem seu site completamente na língua deles.
+
+<Steps>
 1. Crie um arquivo `src/i18n/ui.ts` para armazenar suas strings de tradução:
 
     ```ts
@@ -188,7 +201,7 @@ Criar dicionários de termos para traduzir as labels dos elementos de UI em todo
     } as const;
     ```
     
-2. Crie duas funções: uma para detectar a língua da página baseado na URL atual, e outra para obter as strings de tradução para diferentes partes da UI em `src/i18n/utils.ts`:
+2. Crie duas funções auxiliares: uma para detectar a língua da página baseado na URL atual, e outra para obter as strings traduzidas para diferentes partes da UI em `src/i18n/utils.ts`:
 
     ```js
     // src/i18n/utils.ts
@@ -208,10 +221,10 @@ Criar dicionários de termos para traduzir as labels dos elementos de UI em todo
     ```
 
     :::note[Você percebeu?]
-    No passo 1, a string `nav.twitter` não foi traduzida para o francês. Você pode não querer traduzir todos os termos, como nomes próprios ou termos comuns da indústria. A função `useTranslations` irá retornar o valor da língua padrão se uma chave não for traduzida. Neste exemplo, os usuários franceses também verão “Twitter” na barra de navegação.
+    No passo 1, a string `nav.twitter` não foi traduzida para o francês. Você pode não querer traduzir todos os termos, como nomes próprios ou termos comuns da indústria. A função auxiliar `useTranslations` retornará o valor da língua padrão se uma chave não for traduzida. Neste exemplo, os usuários franceses também verão “Twitter” na barra de navegação.
     :::
     
-3. Importe as funções onde necessário e use-as para escolher a string de UI que corresponde a língua atual. Por exemplo, um componente de navegação pode ser assim: 
+3. Importe os auxiliadores onde necessário e use-os para escolher a string de UI que corresponde a língua atual. Por exemplo, um componente de navegação pode ser assim: 
 
     ```astro 
     ---
@@ -241,6 +254,7 @@ Criar dicionários de termos para traduzir as labels dos elementos de UI em todo
     ```
 
 4. Cada página deve ter um atributo `lang` no elemento `<html>` que corresponda a língua da página. Neste exemplo, um [layout reutilizável](/pt-br/basics/layouts/) extrai a língua da rota atual:
+
     ```astro
     ---
     // src/layouts/Base.astro
@@ -274,11 +288,13 @@ Criar dicionários de termos para traduzir as labels dos elementos de UI em todo
         ...
     </Base>
     ```
+</Steps>
 
-### Permitir que os usuários alternem entre línguas
+### Permitir que usuários alternem línguas
 
-Criar links para as diferentes línguas que você oferece suporte para que os usuários possam escolher a língua que eles querem ler seu site.
+Crie links para as diferentes línguas que você oferece suporte para que os usuários possam escolher a língua que eles querem ler seu site.
 
+<Steps>
 1. Crie um componente para mostrar um link para cada língua:
 
     ```astro
@@ -320,9 +336,11 @@ Criar links para as diferentes línguas que você oferece suporte para que os us
         </body>
     </html>
     ```
+</Steps>
 
 ### Ocultar a língua padrão na URL
 
+<Steps>
 1. Crie um diretório para cada língua, exceto a língua padrão. Por exemplo, armazene suas páginas da língua padrão diretamente em `pages/`, e suas páginas traduzidas em `fr/`:
 
     <FileTree>
@@ -343,7 +361,7 @@ Criar links para as diferentes línguas que você oferece suporte para que os us
     ```
 
 
-3. Adicione uma função ao arquivo `src/i18n/utils.ts`, para traduzir caminhos baseado na língua atual:
+3. Adicione uma função auxiliar ao arquivo `src/i18n/utils.ts`, para traduzir caminhos baseado na língua atual:
    ```js
     // src/i18n/utils.ts
     import { ui, linguaPadrao, mostrarLinguaPadrao } from './ui';
@@ -355,7 +373,8 @@ Criar links para as diferentes línguas que você oferece suporte para que os us
     }
     ```
 
-4. Importe a função onde for necessário. Por exemplo, um componente `nav` pode ficar assim:
+4. Importe o auxiliador onde for necessário. Por exemplo, um componente `nav` pode ficar assim:
+
     ```astro 
     ---
     // src/components/Nav.astro
@@ -384,13 +403,17 @@ Criar links para as diferentes línguas que você oferece suporte para que os us
     </ul>
     ```
 
-5. A função também pode ser usada para traduzir caminhos para uma língua específica. Por exemplo, quando os usuários alternam entre línguas:
+5. A função auxiliar também pode ser usada para traduzir caminhos para uma língua específica. Por exemplo, quando os usuários alternam entre línguas:
+
     ```astro
     ---
     // src/components/SeletorLinguas.astro
     import { linguas } from '../i18n/ui';
-    ---
+    import { getLangFromUrl, useTranslatedPath } from '../i18n/utils';
 
+    const lang = getLangFromUrl(Astro.url);
+    const translatePath = useTranslatedPath(lang);
+    ---
     <ul>
       {Object.entries(linguas).map(([lang, label]) => (
         <li>
@@ -399,84 +422,90 @@ Criar links para as diferentes línguas que você oferece suporte para que os us
       ))}
     </ul>
     ```
+</Steps>
 
 ### Traduzir rotas
 
-Traduzir as rotas das suas páginas para cada língua.
+Traduza as rotas das suas páginas para cada língua.
 
+<Steps>
 1. Adicione mapeamento de rotas no arquivo `src/i18n/ui.ts`:
 
- ```ts
- // src/i18n/ui.ts
- export const rotas = {
-   de: {
-    'services': 'leistungen',
-   },
-   fr: {
-    'services': 'prestations-de-service',
-   },
-  }
+    ```ts
+    // src/i18n/ui.ts
+    export const rotas = {
+      de: {
+        'services': 'leistungen',
+      },
+      fr: {
+        'services': 'prestations-de-service',
+      },
+    }
     ```
 
-2. Atualize a função `usarCaminhoTraduzido` no arquivo `src/i18n/utils.ts` para adicionar a lógica de tradução de roteamento.
-  ```js
-  // src/i18n/utils.ts
-  import { ui, linguaPadrao, mostrarLinguaPadrao, rotas } from './ui';
+2. Atualize a função auxiliar `usarCaminhoTraduzido` no arquivo `src/i18n/utils.ts` para adicionar a lógica de tradução de roteamento.
 
-  export function usarCaminhoTraduzido(lang: keyof typeof ui) {
-    return function traduzirCaminho(caminho: string, l: string = lang) {
-      const nomeCaminho = caminho.replaceAll('/', '')
-      const temTraducao = linguaPadrao !== l && rotas[l] !== undefined && rotas[l][nomeCaminho] !== undefined
-      const caminhoTraduzido = temTraducao ? '/' + rotas[l][nomeCaminho] : path
+    ```js
+    // src/i18n/utils.ts
+    import { ui, linguaPadrao, mostrarLinguaPadrao, rotas } from './ui';
 
-      return !mostrarCaminhoTraduzido && l === linguaPadrao ? caminhoTraduzido : `/${l}${caminhoTraduzido}`
+    export function usarCaminhoTraduzido(lang: keyof typeof ui) {
+      return function traduzirCaminho(caminho: string, l: string = lang) {
+        const nomeCaminho = caminho.replaceAll('/', '')
+        const temTraducao = linguaPadrao !== l && rotas[l] !== undefined && rotas[l][nomeCaminho] !== undefined
+        const caminhoTraduzido = temTraducao ? '/' + rotas[l][nomeCaminho] : path
+
+        return !mostrarCaminhoTraduzido && l === linguaPadrao ? caminhoTraduzido : `/${l}${caminhoTraduzido}`
+      }
     }
-  }
-  ```
+    ```
 
 3. Crie uma função auxiliar para obter a rota, se ela existir baseada na URL atual, em `src/i18n/utils.ts`:
-  ```js
-  // src/i18n/utils.ts
-  import { ui, linguaPadrao, mostrarLinguaPadrao, rotas } from './ui';
 
-  export function pegarRotaDeUrl(url: URL): string | undefined {
-    const nomeCaminho = new URL(url).pathname
-    const partes = nomeCaminho?.split('/')
-    const caminho = partes.pop() || partes.pop()
+    ```js
+    // src/i18n/utils.ts
+    import { ui, linguaPadrao, mostrarLinguaPadrao, rotas } from './ui';
 
-    if (caminho === undefined) {
+    export function pegarRotaDeUrl(url: URL): string | undefined {
+      const nomeCaminho = new URL(url).pathname
+      const partes = nomeCaminho?.split('/')
+      const caminho = partes.pop() || partes.pop()
+
+      if (caminho === undefined) {
+        return undefined
+      }
+
+      const linguaAtual = pegarLangDeURL(url);
+
+      if (linguaPadrao === linguaAtual) {
+        const rota = Object.values(rotas)[0];
+        return rota[caminho] !== undefined ? rota[caminho] : undefined
+      }
+
+      const pegarChavePeloValor = (obj: Record<string, string>, valor: string): string | undefined  => {
+          return Object.keys(obj).find((chave) => obj[chave] === valor)
+      }
+
+      const chaveRevertida = pegarChavePeloValor(rotas[linguaAtual], caminho)
+
+      if (chaveRevertida !== undefined) {
+        return chaveRevertida
+      }
+
       return undefined
     }
-
-    const linguaAtual = pegarLangDeURL(url);
-
-    if (linguaPadrao === linguaAtual) {
-      const rota = Object.values(rotas)[0];
-      return rota[caminho] !== undefined ? rota[caminho] : undefined
-    }
-
-    const pegarChavePeloValor = (obj: Record<string, string>, valor: string): string | undefined  => {
-        return Object.keys(obj).find((chave) => obj[chave] === valor)
-    }
-
-    const chaveRevertida = pegarChavePeloValor(rotas[linguaAtual], caminho)
-
-    if (chaveRevertida !== undefined) {
-      return chaveRevertida
-    }
-
-    return undefined
-  }
-  ```
+    ```
 
 4. A função auxiliar pode ser usada para obter uma rota traduzida. Por exemplo, quando nenhuma rota traduzida é definida, o usuário será redirecionado para sua página inicial:
- ```astro
+
+    ```astro
     ---
     // src/components/SeletorLinguas.astro
     import { languages } from '../i18n/ui';
+    import { pegarRotaDeUrl } from '../i18n/utils';
+
     const rota = pegarRotaDeUrl(Astro.url);
     ---
-
     <ul>
       {Object.entries(linguas).map(([lang, label]) => (
         <li>
@@ -485,12 +514,14 @@ Traduzir as rotas das suas páginas para cada língua.
       ))}
     </ul>
     ```
+</Steps>
 
 ## Recursos
-- [Choosing a Language Tag](https://www.w3.org/International/questions/qa-choosing-language-tags)
-- [Right-to-left Styling 101](https://rtlstyling.com/)
+- [Escolhendo uma Tag de Idioma](https://www.w3.org/International/questions/qa-choosing-language-tags)
+- [Introdução sobre Estilização Right-to-left (RTL)](https://rtlstyling.com/)
 
 ## Bibliotecas da comunidade
 - [astro-i18next](https://github.com/yassinedoghri/astro-i18next) — Uma integração Astro para i18next incluindo alguns componentes utilitários.
 - [astro-i18n](https://github.com/alexandre-fernandez/astro-i18n) — Uma biblioteca de internacionalização focada em TypeScript para Astro.
 - [astro-i18n-aut](https://github.com/jlarmstrongiv/astro-i18n-aut) — Uma integração Astro para i18n que suporta `defaultLocale` sem geração de páginas. A integração é agnóstica a adaptadores e frameworks de UI.
+- [paraglide](https://inlang.com/c/astro) — Uma biblioteca i18n com completa segurança de tipagem projetada especificamente para padrões de hidratação parcial como ilhas Astro.

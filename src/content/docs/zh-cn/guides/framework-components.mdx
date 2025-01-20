@@ -1,15 +1,15 @@
 ---
-title: 框架组件
-description: 学习如何使用 React，Svelte 等框架。
+title: 前端框架
+description: 使用 React、Svelte 等构建你的 Astro 网站。
 ---
 import IntegrationsNav from '~/components/IntegrationsNav.astro'
 import ReadMore from '~/components/ReadMore.astro'
 
 你可以在无需舍弃你所喜欢的组件框架的情况下使用 Astro 构建站点。而是可以任意选择的 UI 框架来创建 Astro [群岛](/zh-cn/concepts/islands/)。
 
-## 官方的 UI 框架集成
+## 官方的前端框架集成
 
-Astro 支持多个受欢迎的框架并提供了集成，包括 [React](https://react.dev/)、[Preact](https://preactjs.com/)、[Svelte](https://svelte.dev/)、[Vue](https://vuejs.org/)、[SolidJS](https://www.solidjs.com/)、[AlpineJS](https://alpinejs.dev/) 和 [Lit](https://lit.dev/)。
+Astro 支持多个流行的框架并提供了官方集成，包括 [React](https://react.dev/)、[Preact](https://preactjs.com/)、[Svelte](https://svelte.dev/)、[Vue](https://vuejs.org/)、[SolidJS](https://www.solidjs.com/)、[AlpineJS](https://alpinejs.dev/)。
 
 在我们的集成目录中找到更多 [社区维护的框架集成](https://astro.build/integrations/?search=&categories%5B%5D=frameworks)（例如 Angular、Qwik、Elm 等）。
 
@@ -21,7 +21,7 @@ Astro 支持多个受欢迎的框架并提供了集成，包括 [React](https://
 
 查看[集成指南](/zh-cn/guides/integrations-guide/)以获取更多关于安装和配置 Astro 集成的信息。
 
-::tip
+:::tip
 想要看看你选择的框架的示例？访问 [astro.new](https://astro.new/) 然后选择一个框架模板。
 :::
 
@@ -227,7 +227,7 @@ import MyAstroComponent from '../components/MyAstroComponent.astro';
 
 ## 我可以激活 Astro 组件吗？
 
-如果你试图使用 `client:` 修改器激活 Astro 组件，你将收到错误消息。
+如果你试图使用 `client:` 修饰符激活 Astro 组件，你将收到错误消息。
 
 [Astro 组件](/zh-cn/basics/astro-components/)是纯 HTML 的模板组件，没有客户端运行时。但是，你可以在 Astro 组件模板中使用 `<script>` 标签，向浏览器发送在全局范围内执行的 JavaScript。
 

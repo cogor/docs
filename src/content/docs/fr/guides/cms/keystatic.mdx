@@ -1,12 +1,15 @@
 ---
 title: Keystatic & Astro
 description: Ajouter du contenu à votre projet Astro en utilisant Keystatic comme CMS
+sidebar:
+  label: Keystatic
 type: cms
 service: Keystatic
 i18nReady: true
 ---
-import FileTree from '~/components/FileTree.astro'
-import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
+import { Steps } from '@astrojs/starlight/components';
+import { FileTree } from '@astrojs/starlight/components';
+import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro';
 
 [Keystatic](https://keystatic.com/) est un système de gestion de contenu open source qui vous permet de structurer votre contenu et de le synchroniser avec GitHub.
 
@@ -36,7 +39,7 @@ Sélectionnez le modèle Astro et vous serez prêt à [déployer](#déploiement-
 
 ## Prérequis
 
-- Un projet Astro existant [avec le rendu côté serveur (SSR) et `output : 'hybrid'` ou `output: 'server'` configuré](/fr/guides/server-side-rendering/).
+- Un projet Astro existant [avec un adaptateur configuré](/fr/guides/on-demand-rendering/).
 
 :::note
 Si vous avez l'intention de synchroniser les données de Keystatic avec GitHub, vous aurez également besoin **d'un compte GitHub avec les permissions `write`** sur le dépôt de ce projet.
@@ -99,7 +102,7 @@ import keystatic from '@keystatic/astro'
 // https://astro.build/config
 export default defineConfig({
   integrations: [react(), markdoc(), keystatic()],
-  output: 'hybrid',
+  output: 'static',
 })
 ```
 
@@ -126,12 +129,8 @@ export default config({
       format: { contentField: 'content' },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
-        content: fields.document({
+        content: fields.markdoc({
           label: 'Content',
-          formatting: true,
-          dividers: true,
-          links: true,
-          images: true,
         }),
       },
     }),
@@ -140,7 +139,7 @@ export default config({
 ```
 
 :::note[Vous utilisez déjà des collections de contenu ?]
-Si vous utilisez déjà [content collections](/fr/guides/content-collections/#définition-des-collections) dans votre projet Astro, mettez à jour le schéma ci-dessus pour qu'il corresponde exactement à la (aux) collection(s) définie(s) dans votre schéma existant.
+Si vous utilisez déjà [content collections](/fr/guides/content-collections/) dans votre projet Astro, mettez à jour le schéma ci-dessus pour qu'il corresponde exactement à la (aux) collection(s) définie(s) dans votre schéma existant.
 :::
 
 Keystatic est maintenant configuré pour gérer votre contenu en fonction de votre schéma.
@@ -157,6 +156,7 @@ Visitez `http://127.0.0.1:4321/keystatic` dans le navigateur pour voir l'interfa
 
 ## Créer un nouveau message
 
+<Steps>
 1. Dans le tableau de bord de l'interface d'administration Keystatic, cliquez sur la collection "Posts".
 
 2. Utilisez le bouton pour créer un nouveau message. Ajoutez le titre " Mon premier article " et un peu de contenu, puis enregistrez l'article.
@@ -164,7 +164,6 @@ Visitez `http://127.0.0.1:4321/keystatic` dans le navigateur pour voir l'interfa
 3. Ce message devrait maintenant être visible dans votre collection " Posts ". Vous pouvez afficher et modifier vos messages individuels à partir de cette page du tableau de bord.
  
 4. Retournez voir vos fichiers de projet Astro. Vous trouverez maintenant un nouveau fichier `.mdoc` dans le répertoire `src/content/posts` pour ce nouvel article :
-
 		<FileTree title="Project Structure">
 		- src/
 		  - content/
@@ -173,7 +172,6 @@ Visitez `http://127.0.0.1:4321/keystatic` dans le navigateur pour voir l'interfa
 		</FileTree>
 
 5. Naviguez vers ce fichier dans votre éditeur de code et vérifiez que vous pouvez voir le contenu Markdown que vous avez saisi. Par exemple, il est possible de voir le contenu Markdown que vous avez saisi :
-
 		```markdown
 		---
 		title: Mon premier billet
@@ -181,6 +179,7 @@ Visitez `http://127.0.0.1:4321/keystatic` dans le navigateur pour voir l'interfa
 		
 		C'est mon tout premier message. Je suis **super** excitée !
 		```
+</Steps>
 
 ## Rendu du contenu Keystatic
 
@@ -207,7 +206,7 @@ const posts = await getCollection('posts')
 
 ### Affichage d'un seul article
 
-Pour afficher le contenu d'un article individuel, vous pouvez importer et utiliser le composant `<Content />` pour [rendre votre contenu en HTML](/fr/guides/content-collections/#rendre-le-contenu-en-html) :
+Pour afficher le contenu d'un article individuel, vous pouvez importer et utiliser le composant `<Content />` pour [rendre votre contenu en HTML](/fr/guides/content-collections/#restitution-du-contenu) :
 
 ```tsx {4-5}
 ---
@@ -225,6 +224,7 @@ const { Content } = await post.render()
 ```
 
 Pour plus d'informations sur l'interrogation, le filtrage, l'affichage du contenu de vos collections et plus encore, consultez la [documentation sur les collections](/fr/guides/content-collections/).
+
 ## Déploiement de Keystatic + Astro
 
 Pour déployer votre site web, consultez nos [guides de déploiement](/fr/guides/deploy/) et suivez les instructions de votre hébergeur préféré.

@@ -8,11 +8,12 @@ description: 学习如何使用 Astro fetch API 获取远程数据。
 
 ## Astro 中的 `fetch()`
 
-所有 [Astro 组件](/zh-cn/basics/astro-components/) 都可以在它们的组件脚本中通过[全局 `fetch()` 函数](https://developer.mozilla.org/zh-CN/docs/Web/API/fetch)来使用完整的 URL（例如 https://example.com/api 或 `Astro.url + "/api"`）发起 API 请求。
+所有 [Astro 组件](/zh-cn/basics/astro-components/) 都可以在它们的组件脚本中通过[全局 `fetch()` 函数](https://developer.mozilla.org/zh-CN/docs/Web/API/fetch)来使用完整的 URL（例如 https://example.com/api ）发起 HTTP 请求到 API。
+此外，你可以使用 `new URL("/api", Astro.url)` 构建一个 URL，指向你的项目中按需在服务器上渲染的页面和端点。
 
-fetch 调用将会在构建时执行，并且数据都可用于组件模板中来生成动态 HTML。如果启用 [SSR](/zh-cn/guides/server-side-rendering/) 模式，任何 fetch 调用都将在运行时执行。
+fetch 调用将会在构建时执行，并且数据都可用于组件模板中来生成动态 HTML。如果启用 [SSR](/zh-cn/guides/on-demand-rendering/) 模式，任何 fetch 调用都将在运行时执行。
 
-💡 在 Astro 组件 script 中[使用**顶层 await**](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/await#top_level_await) 的优势。
+💡 在 Astro 组件 script 中使用 [**顶层 await**](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/await#top_level_await) 的优势。
 
 💡 将获取的数据作为参数传递给 Astro 和框架组件。
 
@@ -92,9 +93,9 @@ const response = await fetch("https://swapi-graphql.netlify.app/.netlify/functio
 const json = await response.json();
 const { film } = json.data;
 ---
-<h1>Fetching information about Star Wars: A New Hope</h1>
-<h2>Title: {film.title}</h2>
-<p>Year: {film.releaseDate}</p>
+<h1>获取有关《星球大战：曙光乍现》的信息</h1>
+<h2>标题：{film.title}</h2>
+<p>年份：{film.releaseDate}</p>
 ```
 
 ## 从无头 CMS 中获取

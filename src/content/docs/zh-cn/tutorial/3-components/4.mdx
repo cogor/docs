@@ -10,6 +10,7 @@ import Checklist from '~/components/Checklist.astro';
 import MultipleChoice from '~/components/tutorial/MultipleChoice.astro';
 import Option from '~/components/tutorial/Option.astro';
 import PreCheck from '~/components/tutorial/PreCheck.astro';
+import { Steps } from '@astrojs/starlight/components';
 
 让我们在移动屏幕上添加一个汉堡菜单（Hamburger Menus）以打开和关闭你的导航链接，这需要一些客户端的交互！
 
@@ -23,6 +24,7 @@ import PreCheck from '~/components/tutorial/PreCheck.astro';
 
 创建一个 `<Hamburger />` 组件，用于打开和关闭移动端菜单。
 
+<Steps>
 1. 在 `src/components/` 中创建一个名为 `Hamburger.astro` 的文件。
 
 2. 将以下代码复制到你的组件中。这将表示你的三行「汉堡」菜单，在移动设备上打开和关闭导航链接菜单。（稍后你将把新的 CSS 样式添加到 `global.css` 中。）
@@ -119,6 +121,7 @@ import PreCheck from '~/components/tutorial/PreCheck.astro';
       }
     }
     ```
+</Steps>
 
 ## 编写你的第一个 script 标签
 
@@ -126,24 +129,27 @@ import PreCheck from '~/components/tutorial/PreCheck.astro';
 
 添加一个 `<script>` 标签提供客户端 JavaScript，以「监听」用户事件并做出相应的响应。
 
+<Steps>
 1. 将以下 `<script>` 标签添加到 `index.astro`，就在结束的 `</body>` 标签之前。
 
     ```astro title="src/pages/index.astro" ins={2-6}
       <Footer />
       <script>
-        document.querySelector('.hamburger').addEventListener('click', () => {
-          document.querySelector('.nav-links').classList.toggle('expanded');
+        document.querySelector('.hamburger')?.addEventListener('click', () => {
+          document.querySelector('.nav-links')?.classList.toggle('expanded');
         });
       </script>
     </body>
     ```
 
 2. 再次在各种尺寸下检查你的浏览器预览，并验证你是否在这个页面上拥有一个能够根据屏幕尺寸响应并对用户输入作出响应的正常运作的汉堡菜单。
+</Steps>
 
 ### 导入一个 `.js` 文件
 
 你可以将你的 JavaScript 直接写在每个页面上，也可以将你的 `<script>` 标签的内容移动到项目中自己的 `.js` 文件中。
 
+<Steps>
 1. 创建 `src/scripts/menu.js`（你将不得不创建一个新的 `/scripts/` 文件夹），并将你的 JavaScript 移动到其中。
 
     ```js title="src/scripts/menu.js"
@@ -157,8 +163,8 @@ import PreCheck from '~/components/tutorial/PreCheck.astro';
     ```astro title="src/pages/index.astro" ins={7} del={3-5}
       <Footer />
       <script>
-        document.querySelector('.hamburger').addEventListener('click', () => {
-          document.querySelector('.nav-links').classList.toggle('expanded');
+        document.querySelector('.hamburger')?.addEventListener('click', () => {
+          document.querySelector('.nav-links')?.classList.toggle('expanded');
         });
 
         import "../scripts/menu.js";
@@ -177,6 +183,7 @@ import PreCheck from '~/components/tutorial/PreCheck.astro';
       </script>
     </body>
     ```
+</Steps>
 
 :::note[要点]
 你之前使用了一些 JavaScript 来构建你网站的部分内容：
@@ -220,7 +227,7 @@ import PreCheck from '~/components/tutorial/PreCheck.astro';
       </Option>
     </MultipleChoice>
 
-3. 当编写或导入到组件的 `<script>` 标签中时，客户端 JavaScript 将被发送到用户的浏览器中：
+3. 在哪里编写或导入客户端 JavaScript，会将其发送到用户的浏览器中：
     <MultipleChoice>
       <Option isCorrect>
         在 `<script>` 标签中

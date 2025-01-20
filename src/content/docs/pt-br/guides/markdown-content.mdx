@@ -4,7 +4,7 @@ description: Aprenda como criar conteúdo usando Markdown ou MDX no Astro
 i18nReady: true
 ---
 import Since from '~/components/Since.astro';
-import FileTree from '~/components/FileTree.astro';
+import { FileTree } from '@astrojs/starlight/components';
 import RecipeLinks from "~/components/RecipeLinks.astro";
 
 
@@ -65,7 +65,7 @@ Astro providencia algumas funcionalidades extras integradas ao Markdown, dispon�
 
 ### Frontmatter `layout`
 
-Astro fornece páginas Markdown e MDX com a propriedade frontmatter especial `layout`, que pode especificar o caminho relativo (ou [atalho](/pt-br/guides/aliases/)) para um [componente de layout](/pt-br/basics/layouts/#layouts-markdownmdx) Astro.
+Astro fornece páginas Markdown e MDX com a propriedade frontmatter especial `layout`, que pode especificar o caminho relativo (ou [atalho](/pt-br/guides/imports/#aliases)) para um [componente de layout](/pt-br/basics/layouts/#layouts-markdown) Astro.
 
 ```markdown {3}
 ---
@@ -97,7 +97,7 @@ const {frontmatter} = Astro.props;
 
 Você também pode [estilizar seu Markdown](/pt-br/guides/styling/#estilização-de-markdown) no seu componente de layout.
 
-📚 Aprenda mais sobre [Layouts Markdown](/pt-br/basics/layouts/#layouts-markdownmdx).
+📚 Aprenda mais sobre [Layouts Markdown](/pt-br/basics/layouts/#layouts-markdown).
 
 ### IDs de Títulos
 
@@ -570,8 +570,8 @@ export default defineConfig({
 Astro vem com suporte nativo para [Shiki](https://shiki.matsu.io/) e [Prism](https://prismjs.com/). Isso fornece syntax highlighting para:
 
 - todas as code fences (\`\`\`) usadas em um arquivo Markdown ou MDX.
-- conteúdo dentro do [componente `<Code />` nativo](/pt-br/reference/api-reference/#code-) (oferecido por Shiki).
-- conteúdo dentro do [componente `<Prism />`](/pt-br/reference/api-reference/#prism-) (oferecido por Prism).
+- conteúdo dentro do [componente `<Code />` nativo](/pt-br/guides/syntax-highlighting/#code-) (oferecido por Shiki).
+- conteúdo dentro do [componente `<Prism />`](/pt-br/guides/syntax-highlighting/#prism-) (oferecido por Prism).
 
 Shiki é ativado por padrão, pré-configurado com o tema `github-dark`. A saída compilada será limitada a `style`s inline sem classes CSS de fora, folhas de estilo ou JS no lado do cliente.
 
@@ -643,7 +643,7 @@ Você também pode visitar a [lista de linguagens suportadas pelo Prism](https:/
 
 ## Buscando Markdown Remoto
 
-Astro foi primariamente projetado para arquivos Markdown locais que poderiam ser salvos dentro do diretório do seu projeto. Porém, pode haver certos casos em que você precisa buscar Markdown de uma fonte remota. Por exemplo, você pode precisar buscar e renderizar Markdown de uma API remota quando faz a build do seu site (ou quando um usuário faz uma requisição ao seu website, quando estiver utilizando [SSR](/pt-br/guides/server-side-rendering/)).
+Astro foi primariamente projetado para arquivos Markdown locais que poderiam ser salvos dentro do diretório do seu projeto. Porém, pode haver certos casos em que você precisa buscar Markdown de uma fonte remota. Por exemplo, você pode precisar buscar e renderizar Markdown de uma API remota quando faz a build do seu site (ou quando um usuário faz uma requisição ao seu website, quando estiver utilizando [SSR](/pt-br/guides/on-demand-rendering/)).
 
 **Astro não inclui suporte integrado para Markdown remoto!** Para buscar Markdown remoto e renderizá-lo como HTML, você precisará instalar e configurar seu próprio parser Markdown do npm. Ele **não irá** herdar nenhuma das opções nativas de Markdown e MDX do Astro que você configurou. Certifique-se de que você entende estas limitações antes de implementar isso no seu projeto.
 

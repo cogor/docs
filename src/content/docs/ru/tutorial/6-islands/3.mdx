@@ -4,18 +4,19 @@ title: Поздравляем!
 description: >-
   Руководство: Создайте свой первый блог в Astro —
 
-  Посмотрите на финальную версию вашего проекта и узнайте, что дальше с
-  Astro!
+  Ознакомьтесь с окончательной версией вашего проекта и узнайте,
+  что будет дальше, с помощью Астро!
 i18nReady: true
 ---
-import Badge from '~/components/Badge.astro';
+
 import Box from '~/components/tutorial/Box.astro';
 import Checklist from '~/components/Checklist.astro';
 import CompletionConfetti from '~/components/tutorial/CompletionConfetti.astro';
 import PreCheck from '~/components/tutorial/PreCheck.astro';
+import Button from '~/components/Button.astro';
 
 
-Вам нужно сделать еще одно изменение...
+Вам нужно сделать ещё одно изменение...
 
 ```astro title="src/pages/about.astro" del={5} ins={6}
 ---
@@ -32,7 +33,7 @@ const identity = {
   hobbies: ["фотография", "наблюдение за птицами", "бейсбол"],
 };
 const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Написание документации"];
-const skillColor = "темно-синий";
+const skillColor = "тёмно-синий";
 const fontWeight = "жирный";
 const textCase = "верхний регистр";
 ---
@@ -40,11 +41,10 @@ const textCase = "верхний регистр";
 
 Мы надеемся, вы узнали немного об основах Astro и весело провели время!
 
-Вы можете найти код на этом этапе учебника на [GitHub](https://github.com/withastro/blog-tutorial-demo/tree/complete) или [StackBlitz](https://stackblitz.com/github/withastro/blog-tutorial-demo/tree/complete?file=src/pages/index.astro).
+Вы можете найти код на этом этапе учебника на [GitHub](https://github.com/withastro/blog-tutorial-demo/tree/complete) или
+[StackBlitz](https://stackblitz.com/github/withastro/blog-tutorial-demo/tree/complete?file=src/pages/index.astro).
 
-Сравните ваш код с этим примером, или, если вы только что присоединились к нам, создайте форк на StackBlitz, чтобы начать кодировать прямо в вашем браузере отсюда.
-
-Посетите нашу документацию для руководств и справочных материалов, и присоединитесь к нашему Discord, чтобы задать вопросы, получить помощь или просто пообщаться!
+Ознакомьтесь с нашими документами, чтобы найти руководства и справочные материалы, а также посетите наш Discord, чтобы задать вопросы, получить помощь или просто пообщаться!
 
 Добро пожаловать во Вселенную, космонавт. 👩🏼‍🚀👨🏿‍🚀🧑‍🚀👩🏾‍🚀
 
@@ -59,10 +59,17 @@ const textCase = "верхний регистр";
 
 ## Следующие шаги
 
-Продолжите с нашим [руководством по миграции этого проекта к коллекциям контента](/ru/guides/content-collections/#migrating-from-file-based-routing)
-
 [Начните новый проект на Astro](/ru/getting-started/)
 
 [Присоединитесь к нам в Discord ↗](https://astro.build/chat)
 
 <CompletionConfetti />
+
+## Поделитесь своими достижениями!
+
+Поздравляем вас с завершением учебника по созданию блога на Astro! Поделитесь своим достижением с миром, и пусть все узнают, что вы теперь космонавт!
+
+<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+  <Button link='https://twitter.com/intent/tweet?text=Just%20finished%20learning%20how%20to%20build%20my%20first%20Astro%20blog!%20Check%20it%20out%20at%20https://docs.astro.build/%0Avia%20%40astrodotbuild'>Поделиться в Twitter</Button>
+  <Button link='https://www.reddit.com/submit?url=https://docs.astro.build/&title=Just%20finished%20learning%20how%20to%20build%20my%20first%20Astro%20blog!'>Поделиться в Reddit</Button>
+</div>
